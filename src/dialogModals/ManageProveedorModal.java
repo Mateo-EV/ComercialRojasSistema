@@ -54,14 +54,14 @@ public class ManageProveedorModal extends javax.swing.JDialog {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        nameInput = new components.jInput();
+        nameInput = new components.jInput("Ingrese el nombre");
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new components.jButton();
-        emailInput = new components.jInput();
+        emailInput = new components.jInput("Ingrese el email");
         jLabel5 = new javax.swing.JLabel();
-        telefonoInput = new components.jInput();
+        telefonoInput = new components.jInput("Ingrese el teléfono");
         jLabel7 = new javax.swing.JLabel();
-        direccionInput = new components.jInput();
+        direccionInput = new components.jInput("Ingrese la dirección");
         jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -81,17 +81,17 @@ public class ManageProveedorModal extends javax.swing.JDialog {
             }
         });
 
-        emailInput.setText("Ingrese el nombre");
+        emailInput.setText("Ingrese el email");
 
         jLabel5.setText("Email");
 
-        telefonoInput.setText("Ingrese el nombre");
+        telefonoInput.setText("Ingrese el teléfono");
 
-        jLabel7.setText("Telefono");
+        jLabel7.setText("Teléfono");
 
-        direccionInput.setText("");
+        direccionInput.setText("Ingrese la dirección");
 
-        jLabel8.setText("Direccion");
+        jLabel8.setText("Dirección");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -141,7 +141,7 @@ public class ManageProveedorModal extends javax.swing.JDialog {
                         .addComponent(telefonoInput, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();

@@ -85,6 +85,9 @@
       </SubComponents>
     </Container>
     <Component class="components.jInput" name="jInput1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Buscar productos"/>
+      </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new components.jInput(&quot;Buscar Productos&quot;)"/>
       </AuxValues>

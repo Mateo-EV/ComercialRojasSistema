@@ -104,7 +104,7 @@ public class ClientePage extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jInput1 = new components.jInput();
+        jInput1 = new components.jInput("Buscar Clientes");
         jButton1 = new components.jButton();
 
         setBackground(new java.awt.Color(255, 255, 255));

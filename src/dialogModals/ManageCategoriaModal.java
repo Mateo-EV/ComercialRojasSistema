@@ -52,9 +52,9 @@ public class ManageCategoriaModal extends javax.swing.JDialog {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        nameInput = new components.jInput();
+        nameInput = new components.jInput("Ingrese el nombre");
         jLabel2 = new javax.swing.JLabel();
-        descripcionInput = new components.jInput();
+        descripcionInput = new components.jInput("Ingrese la descripción");
         jLabel3 = new javax.swing.JLabel();
         jButton1 = new components.jButton();
 

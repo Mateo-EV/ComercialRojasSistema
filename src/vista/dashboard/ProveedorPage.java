@@ -66,7 +66,7 @@ public class ProveedorPage extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jInput1 = new components.jInput("Buscar proveedor");
+        jInput1 = new components.jInput("Buscar proveedores");
         OpenModalButton = new components.jButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
@@ -77,7 +77,7 @@ public class ProveedorPage extends javax.swing.JPanel {
         jTable1.setModel(this.cargarTablaProveedores());
         jScrollPane1.setViewportView(jTable1);
 
-        jInput1.setText("Buscar proveedor");
+        jInput1.setText("Buscar proveedores");
 
         OpenModalButton.setText("Agregar Proveedor");
         OpenModalButton.addActionListener(new java.awt.event.ActionListener() {

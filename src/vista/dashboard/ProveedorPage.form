@@ -86,10 +86,10 @@
     </Container>
     <Component class="components.jInput" name="jInput1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Buscar proveedor"/>
+        <Property name="text" type="java.lang.String" value="Buscar proveedores"/>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new components.jInput(&quot;Buscar proveedor&quot;)"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new components.jInput(&quot;Buscar proveedores&quot;)"/>
       </AuxValues>
     </Component>
     <Component class="components.jButton" name="OpenModalButton">

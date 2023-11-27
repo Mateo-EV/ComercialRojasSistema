@@ -88,6 +88,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Buscar categor&#xed;a"/>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new components.jInput(&quot;Buscar categor&#xed;a&quot;)"/>
+      </AuxValues>
     </Component>
     <Component class="components.jButton" name="OpenModalButton">
       <Properties>

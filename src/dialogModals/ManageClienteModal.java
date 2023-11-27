@@ -59,18 +59,18 @@ public class ManageClienteModal extends javax.swing.JDialog {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        nameInput = new components.jInput();
+        nameInput = new components.jInput("Ingrese el nombre");
         jLabel2 = new javax.swing.JLabel();
-        dniInput = new components.jInput();
+        dniInput = new components.jInput("Ingrese el DNI | RUC");
         jLabel3 = new javax.swing.JLabel();
         jButton1 = new components.jButton();
-        apellidoInput = new components.jInput();
+        apellidoInput = new components.jInput("Ingrese el apellido");
         jLabel4 = new javax.swing.JLabel();
-        emailInput = new components.jInput();
+        emailInput = new components.jInput("Ingrese el email");
         jLabel5 = new javax.swing.JLabel();
-        telefonoInput = new components.jInput();
+        telefonoInput = new components.jInput("Ingrese el telefono");
         jLabel7 = new javax.swing.JLabel();
-        direccionInput = new components.jInput();
+        direccionInput = new components.jInput("Ingrese la dirección");
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         TipoClienteComboBox = new javax.swing.JComboBox<>();
@@ -85,7 +85,7 @@ public class ManageClienteModal extends javax.swing.JDialog {
 
         jLabel2.setText("Nombre");
 
-        dniInput.setText("Ingrese la descripción");
+        dniInput.setText("Ingrese el DNI | RUC");
 
         jLabel3.setText("Dni | RUC");
 
@@ -96,19 +96,19 @@ public class ManageClienteModal extends javax.swing.JDialog {
             }
         });
 
-        apellidoInput.setText("Ingrese el nombre");
+        apellidoInput.setText("Ingrese el apellido");
 
         jLabel4.setText("Apellido");
 
-        emailInput.setText("Ingrese el nombre");
+        emailInput.setText("Ingrese el email");
 
         jLabel5.setText("Email");
 
-        telefonoInput.setText("Ingrese el nombre");
+        telefonoInput.setText("Ingrese el telefono");
 
         jLabel7.setText("Telefono");
 
-        direccionInput.setText("");
+        direccionInput.setText("Ingrese la dirección");
 
         jLabel8.setText("Direccion");
 

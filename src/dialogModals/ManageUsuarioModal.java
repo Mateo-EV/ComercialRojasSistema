@@ -80,19 +80,19 @@ public class ManageUsuarioModal extends javax.swing.JDialog {
 
         estadoButtonGroup = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
-        nameInput = new components.jInput();
+        nameInput = new components.jInput("Ingrese el nombre");
         jLabel2 = new javax.swing.JLabel();
-        dniInput = new components.jInput();
+        dniInput = new components.jInput("Ingrese el dni");
         jLabel3 = new javax.swing.JLabel();
         jButton1 = new components.jButton();
-        apellidoInput = new components.jInput();
+        apellidoInput = new components.jInput("Ingrese el apellido");
         jLabel4 = new javax.swing.JLabel();
-        emailInput = new components.jInput();
+        emailInput = new components.jInput("Ingrese el email");
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        telefonoInput = new components.jInput();
+        telefonoInput = new components.jInput("Ingrese el teléfono");
         jLabel7 = new javax.swing.JLabel();
-        passwordInput = new components.jInput();
+        passwordInput = new components.jInput("Ingrese la contraseña");
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         RolComboBox = new javax.swing.JComboBox<>();
@@ -109,7 +109,7 @@ public class ManageUsuarioModal extends javax.swing.JDialog {
 
         jLabel2.setText("Nombre");
 
-        dniInput.setText("Ingrese la descripción");
+        dniInput.setText("Ingrese el dni");
 
         jLabel3.setText("Dni");
 
@@ -120,21 +120,21 @@ public class ManageUsuarioModal extends javax.swing.JDialog {
             }
         });
 
-        apellidoInput.setText("Ingrese el nombre");
+        apellidoInput.setText("Ingrese el apellido");
 
         jLabel4.setText("Apellido");
 
-        emailInput.setText("Ingrese el nombre");
+        emailInput.setText("Ingrese el email");
 
         jLabel5.setText("Email");
 
         jLabel6.setText("Estado");
 
-        telefonoInput.setText("Ingrese el nombre");
+        telefonoInput.setText("Ingrese el teléfono");
 
-        jLabel7.setText("Telefono");
+        jLabel7.setText("Teléfono");
 
-        passwordInput.setText("Ingrese la descripción");
+        passwordInput.setText("Ingrese la contraseña");
 
         jLabel8.setText("Contraseña");
 

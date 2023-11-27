@@ -82,16 +82,16 @@ public class ManageProductoModal extends javax.swing.JDialog {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        nameInput = new components.jInput();
+        nameInput = new components.jInput("Ingrese el nombre");
         jLabel2 = new javax.swing.JLabel();
-        descripcionInput = new components.jInput();
+        descripcionInput = new components.jInput("Ingrese la descripción");
         jLabel3 = new javax.swing.JLabel();
         jButton1 = new components.jButton();
         jLabel4 = new javax.swing.JLabel();
-        stockInput = new components.jInput();
+        stockInput = new components.jInput("Ingrese el stock inicial");
         jLabel5 = new javax.swing.JLabel();
-        marcaInput = new components.jInput();
-        precioInput = new components.jInput();
+        marcaInput = new components.jInput("Ingrese la marca");
+        precioInput = new components.jInput("Ingrese el precio");
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         CategoriaComboBox = new javax.swing.JComboBox<>();
@@ -196,8 +196,9 @@ public class ManageProductoModal extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addGap(43, 43, 43)))
+                .addGap(18, 18, 18)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();

@@ -26,7 +26,7 @@
               <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="jInput1" pref="140" max="32767" attributes="0"/>
+                      <Component id="jInput1" pref="135" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="417" max="-2" attributes="0"/>
                       <Component id="OpenModalButton" max="32767" attributes="0"/>
                   </Group>
@@ -62,7 +62,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="18" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Ventas"/>
+        <Property name="text" type="java.lang.String" value="Compras"/>
       </Properties>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
@@ -86,15 +86,15 @@
     </Container>
     <Component class="components.jInput" name="jInput1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Buscar ventas"/>
+        <Property name="text" type="java.lang.String" value="Buscar compras"/>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new components.jInput(&quot;Buscar ventas&quot;)"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new components.jInput(&quot;Buscar compras&quot;)"/>
       </AuxValues>
     </Component>
     <Component class="components.jButton" name="OpenModalButton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Agregar Ventas"/>
+        <Property name="text" type="java.lang.String" value="Agregar Compra"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="OpenModalButtonActionPerformed"/>

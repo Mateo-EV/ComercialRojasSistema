@@ -88,6 +88,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Buscar Clientes"/>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new components.jInput(&quot;Buscar Clientes&quot;)"/>
+      </AuxValues>
     </Component>
     <Component class="components.jButton" name="jButton1">
       <Properties>

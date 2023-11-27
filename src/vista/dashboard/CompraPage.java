@@ -66,20 +66,20 @@ public class CompraPage extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jInput1 = new components.jInput("Buscar ventas");
+        jInput1 = new components.jInput("Buscar compras");
         OpenModalButton = new components.jButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel1.setText("Ventas");
+        jLabel1.setText("Compras");
 
         jTable1.setModel(this.cargarTablaCompras());
         jScrollPane1.setViewportView(jTable1);
 
-        jInput1.setText("Buscar ventas");
+        jInput1.setText("Buscar compras");
 
-        OpenModalButton.setText("Agregar Ventas");
+        OpenModalButton.setText("Agregar Compra");
         OpenModalButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 OpenModalButtonActionPerformed(evt);
@@ -95,7 +95,7 @@ public class CompraPage extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jInput1, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                        .addComponent(jInput1, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
                         .addGap(417, 417, 417)
                         .addComponent(OpenModalButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()

@@ -72,6 +72,8 @@ public class ProductoPage extends javax.swing.JPanel {
         jTable1.setModel(this.cargarTablaProductos());
         jScrollPane1.setViewportView(jTable1);
 
+        jInput1.setText("Buscar productos");
+
         OpenModalButton.setText("Agregar Producto");
         OpenModalButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

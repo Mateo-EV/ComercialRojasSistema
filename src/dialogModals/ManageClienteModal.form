@@ -125,6 +125,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Ingrese el nombre"/>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new components.jInput(&quot;Ingrese el nombre&quot;)"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
@@ -133,8 +136,11 @@
     </Component>
     <Component class="components.jInput" name="dniInput">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Ingrese la descripci&#xf3;n"/>
+        <Property name="text" type="java.lang.String" value="Ingrese el DNI | RUC"/>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new components.jInput(&quot;Ingrese el DNI | RUC&quot;)"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
@@ -151,8 +157,11 @@
     </Component>
     <Component class="components.jInput" name="apellidoInput">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Ingrese el nombre"/>
+        <Property name="text" type="java.lang.String" value="Ingrese el apellido"/>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new components.jInput(&quot;Ingrese el apellido&quot;)"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
@@ -161,8 +170,11 @@
     </Component>
     <Component class="components.jInput" name="emailInput">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Ingrese el nombre"/>
+        <Property name="text" type="java.lang.String" value="Ingrese el email"/>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new components.jInput(&quot;Ingrese el email&quot;)"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel5">
       <Properties>
@@ -171,8 +183,11 @@
     </Component>
     <Component class="components.jInput" name="telefonoInput">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Ingrese el nombre"/>
+        <Property name="text" type="java.lang.String" value="Ingrese el telefono"/>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new components.jInput(&quot;Ingrese el telefono&quot;)"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel7">
       <Properties>
@@ -181,8 +196,11 @@
     </Component>
     <Component class="components.jInput" name="direccionInput">
       <Properties>
-        <Property name="text" type="java.lang.String" value=""/>
+        <Property name="text" type="java.lang.String" value="Ingrese la direcci&#xf3;n"/>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new components.jInput(&quot;Ingrese la direcci&#xf3;n&quot;)"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel8">
       <Properties>
