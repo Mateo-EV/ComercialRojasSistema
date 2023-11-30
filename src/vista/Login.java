@@ -6,6 +6,7 @@ package vista;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import controlador.UsuarioControlador;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import modelo.Usuario;
 
@@ -42,8 +43,8 @@ public class Login extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         CodigoInput = new components.jInput("Ingresar código");
         jLabel5 = new javax.swing.JLabel();
-        PasswordInput = new components.jInput("***********");
         loginButton = new components.jButton();
+        PasswordInput = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("COMERCIAL ROJAS - SISTEMA DE VENTAS");
@@ -87,16 +88,16 @@ public class Login extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel5.setText("Contraseña");
 
-        PasswordInput.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                PasswordInputKeyPressed(evt);
-            }
-        });
-
         loginButton.setText("Ingresar");
         loginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loginButtonActionPerformed(evt);
+            }
+        });
+
+        PasswordInput.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                PasswordInputKeyPressed(evt);
             }
         });
 
@@ -107,17 +108,17 @@ public class Login extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(background, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(56, 56, 56)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(CodigoInput, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CodigoInput, javax.swing.GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel3))
-                    .addComponent(PasswordInput, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(PasswordInput))
                 .addGap(116, 417, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -142,8 +143,8 @@ public class Login extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(PasswordInput, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(36, 36, 36)
+                        .addComponent(PasswordInput, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(53, 53, 53)
                         .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -159,20 +160,19 @@ public class Login extends javax.swing.JFrame {
     // Método invocado cuando se presiona una tecla en el campo de entrada de código
     private void CodigoInputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_CodigoInputKeyPressed
         // Si se presiona la tecla Enter (VK_ENTER), el enfoque se mueve al campo de entrada de contraseña
-        if(evt.getKeyCode() == evt.VK_ENTER) PasswordInput.requestFocus();
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER) PasswordInput.requestFocus();
     }//GEN-LAST:event_CodigoInputKeyPressed
 
-    // Método invocado cuando se presiona una tecla en el campo de entrada de contraseña
     private void PasswordInputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PasswordInputKeyPressed
-        // Si se presiona la tecla Enter (VK_ENTER), se llama al método "login" para intentar iniciar sesión
-        if(evt.getKeyCode() == evt.VK_ENTER) this.login();
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER) this.login();
     }//GEN-LAST:event_PasswordInputKeyPressed
 
     // Método para realizar la lógica de inicio de sesión
     private void login(){
         // Obtiene el código de usuario y contraseña ingresados por el usuario
         String id = CodigoInput.getValue();
-        String password = PasswordInput.getValue();
+        char passwordChar[] = PasswordInput.getPassword();
+        String password = String.valueOf(passwordChar);
 
         // Verifica si ambos campos no están vacíos
         if (!id.isEmpty() && !password.isEmpty()) {
@@ -211,7 +211,7 @@ public class Login extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private components.jInput CodigoInput;
-    private components.jInput PasswordInput;
+    private javax.swing.JPasswordField PasswordInput;
     private javax.swing.JPanel background;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

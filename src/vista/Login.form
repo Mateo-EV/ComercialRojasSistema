@@ -27,18 +27,18 @@
           <Group type="102" attributes="0">
               <Component id="background" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="jLabel2" min="-2" pref="149" max="-2" attributes="0"/>
                   <Component id="jLabel4" min="-2" pref="149" max="-2" attributes="0"/>
-                  <Component id="CodigoInput" alignment="0" min="-2" pref="347" max="-2" attributes="0"/>
+                  <Component id="CodigoInput" alignment="0" pref="347" max="32767" attributes="0"/>
                   <Component id="jLabel5" min="-2" pref="149" max="-2" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel1" min="-2" pref="234" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="PasswordInput" min="-2" pref="347" max="-2" attributes="0"/>
                   <Component id="loginButton" alignment="0" min="-2" pref="207" max="-2" attributes="0"/>
+                  <Component id="PasswordInput" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="116" pref="417" max="32767" attributes="0"/>
           </Group>
@@ -69,8 +69,8 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jLabel5" min="-2" pref="31" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="PasswordInput" min="-2" pref="39" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
+                      <Component id="PasswordInput" min="-2" pref="38" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
                       <Component id="loginButton" min="-2" pref="40" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -168,20 +168,17 @@
         <Property name="text" type="java.lang.String" value="Contrase&#xf1;a"/>
       </Properties>
     </Component>
-    <Component class="components.jInput" name="PasswordInput">
-      <Events>
-        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="PasswordInputKeyPressed"/>
-      </Events>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new components.jInput(&quot;***********&quot;)"/>
-      </AuxValues>
-    </Component>
     <Component class="components.jButton" name="loginButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Ingresar"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="loginButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JPasswordField" name="PasswordInput">
+      <Events>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="PasswordInputKeyPressed"/>
       </Events>
     </Component>
   </SubComponents>
