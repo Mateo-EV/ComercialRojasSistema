@@ -11,20 +11,24 @@ import java.util.regex.Pattern;
  * @author dell
  */
 public class Validator {
-    static boolean EMAIL(String email){
+    public static void EMAIL (String email) throws Exception {
         String regx = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
-        return Pattern.compile(regx).matcher(email).matches();
+        if(!Pattern.compile(regx).matcher(email).matches())
+            throw new Exception("Ingrese un email válido");
     }
     
-    static boolean DNI(String dni){
-        return Pattern.compile("^[0-9]{7,8}+$").matcher(dni).matches();
+    public static void DNI(String dni) throws Exception {
+        if(!Pattern.compile("^[0-9]{7,8}+$").matcher(dni).matches())
+            throw new Exception("Ingrese un DNI válido");
     }
     
-    static boolean RUC(String ruc){
-        return Pattern.compile("^[0-9]{11}+$").matcher(ruc).matches();
+    public static void RUC(String ruc) throws Exception {
+        if(!Pattern.compile("^[0-9]{11}+$").matcher(ruc).matches())
+            throw new Exception("Ingrese un RUC válido");
     }
     
-    static boolean TELEFONO(String telefono){
-        return Pattern.compile("^\\+d{10}$").matcher(telefono).matches();
+    public static void TELEFONO(String telefono) throws Exception {
+        if(!Pattern.compile("^(\\+34|0034|34)?[ -]*(6|7)[ -]*([0-9][ -]*){8}").matcher(telefono).matches())
+            throw new Exception("Ingrese un teléfono válido");
     }
 }

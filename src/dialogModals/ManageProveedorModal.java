@@ -7,6 +7,7 @@ package dialogModals;
 import javax.swing.JOptionPane;
 import controlador.ProveedorControlador;
 import modelo.Proveedor;
+import utils.Validator;
 import vista.dashboard.ClientePage;
 import vista.dashboard.ProveedorPage;
 
@@ -148,61 +149,68 @@ public class ManageProveedorModal extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(idProveedor != null)
-            editarCliente();
+        if (idProveedor != null)
+            editarProveedor();
         else
-            crearNuevoCliente();
+            crearNuevoProveedor();
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void crearNuevoCliente(){
-        Proveedor proveedor = new Proveedor();
-
-        String nombre = nameInput.getValue();
-        String email = emailInput.getValue();
-        String telefono = telefonoInput.getValue();
-        String direccion = direccionInput.getValue();
-
-        if(nombre.isEmpty() || email.isEmpty() || telefono.isEmpty()){
-            JOptionPane.showMessageDialog(null, "Complete todos los campos");
-            return;
-        }      
-        proveedor.setNombre(nombre);
-        proveedor.setEmail(email);
-        proveedor.setTelefono(telefono);
-        proveedor.setDireccion(direccion);
-
-        if(ProveedorControlador.crearProveedor(proveedor)){
-            // Si la categoría se crea con éxito, muestra un mensaje de éxito
-            JOptionPane.showMessageDialog(null, "Registro guardado");
-            ProveedorPage.recagarTabla();
-            dispose();
-        } else {
-            // Si hay un error al crear la categoría, muestra un mensaje de error
-            JOptionPane.showMessageDialog(null, "Error al guardar");
+    
+    private void crearNuevoProveedor() {
+        try {
+            Proveedor proveedor = new Proveedor();
+            
+            String nombre = nameInput.getValue();
+            String email = emailInput.getValue();
+            String telefono = telefonoInput.getValue();
+            String direccion = direccionInput.getValue();
+            
+            if (nombre.isEmpty() || email.isEmpty() || telefono.isEmpty())
+                throw new Exception("Complete todos los campos");
+            
+            Validator.EMAIL(email);
+            Validator.TELEFONO(telefono);
+            
+            proveedor.setNombre(nombre);
+            proveedor.setEmail(email);
+            proveedor.setTelefono(telefono);
+            proveedor.setDireccion(direccion);
+            
+            if (ProveedorControlador.crearProveedor(proveedor)) {
+                // Si la categoría se crea con éxito, muestra un mensaje de éxito
+                JOptionPane.showMessageDialog(null, "Registro guardado");
+                ProveedorPage.recagarTabla();
+                dispose();
+            } else {
+                // Si hay un error al crear la categoría, muestra un mensaje de error
+                JOptionPane.showMessageDialog(null, "Error al guardar");
+            }
+        } catch (Exception error) {
+            JOptionPane.showMessageDialog(null, error.getMessage());
         }
-        
     }
     
-    private void editarCliente(){
+    private void editarProveedor() {
+        try {
         Proveedor proveedor = new Proveedor();
-
+        
         String nombre = nameInput.getValue();
         String email = emailInput.getValue();
         String telefono = telefonoInput.getValue();
         String direccion = direccionInput.getValue();
-
-        if(nombre.isEmpty() || email.isEmpty() || telefono.isEmpty()){
-            JOptionPane.showMessageDialog(null, "Complete todos los campos");
-            return;
-        }
+        
+        if (nombre.isEmpty() || email.isEmpty() || telefono.isEmpty())
+            throw new Exception("Complete todos los campos");
+        
+        Validator.EMAIL(email);
+        Validator.TELEFONO(telefono);
         
         proveedor.setId(Integer.parseInt(idProveedor));
         proveedor.setNombre(nombre);
         proveedor.setEmail(email);
         proveedor.setTelefono(telefono);
         proveedor.setDireccion(direccion);
-
-        if(ProveedorControlador.actualizarProveedor(proveedor)){
+        
+        if (ProveedorControlador.actualizarProveedor(proveedor)) {
             // Si la categoría se crea con éxito, muestra un mensaje de éxito
             JOptionPane.showMessageDialog(null, "Registro guardado");
             ProveedorPage.recagarTabla();
@@ -211,8 +219,11 @@ public class ManageProveedorModal extends javax.swing.JDialog {
             // Si hay un error al crear la categoría, muestra un mensaje de error
             JOptionPane.showMessageDialog(null, "Error al guardar");
         }
+        } catch (Exception error){
+            JOptionPane.showMessageDialog(null, error.getMessage());
+        }
     }
-    
+
     /**
      * @param args the command line arguments
      */

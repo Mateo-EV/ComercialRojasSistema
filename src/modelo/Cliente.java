@@ -12,7 +12,7 @@ public class Cliente {
     private int id;
     private String nombre;
     private String apellido;
-    private String dni;
+    private String dni_ruc;
     private String email;
     private String telefono;
     private String direccion;
@@ -20,11 +20,11 @@ public class Cliente {
 
     public Cliente() {}
 
-    public Cliente(int id, String nombre, String apellido, String dni, String email, String telefono, String direccion, String tipoCliente) {
+    public Cliente(int id, String nombre, String apellido, String dni_ruc, String email, String telefono, String direccion, String tipoCliente) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
-        this.dni = dni;
+        this.dni_ruc = dni_ruc;
         this.email = email;
         this.telefono = telefono;
         this.direccion = direccion;
@@ -55,12 +55,12 @@ public class Cliente {
         this.apellido = apellido;
     }
 
-    public String getDni() {
-        return dni;
+    public String getDni_ruc() {
+        return dni_ruc;
     }
 
-    public void setDni(String dni) {
-        this.dni = dni;
+    public void setDni_ruc(String dni_ruc) {
+        this.dni_ruc = dni_ruc;
     }
 
     public String getEmail() {

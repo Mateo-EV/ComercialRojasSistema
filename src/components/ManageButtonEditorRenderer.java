@@ -120,13 +120,14 @@ public class ManageButtonEditorRenderer extends AbstractCellEditor implements Ta
                 
                 if(respuesta == 0){
                     int operacion = CategoriaControlador.eliminarCategoria(id);
-                    if(operacion == 1)
-                        JOptionPane.showMessageDialog(parent, "No se puede eliminar una categoria que tiene al menos un producto");
-                    else if(operacion == 0){
-                        JOptionPane.showMessageDialog(parent, "Registro elminado con éxito");
-                        CategoriaPage.recagarTabla();
-                    } else
-                        JOptionPane.showMessageDialog(parent, "Ocurrió un error al eliminar la categoría");
+                    switch (operacion) {
+                        case 1 -> JOptionPane.showMessageDialog(parent, "No se puede eliminar una categoria que tiene al menos un producto");
+                        case 0 -> {
+                            JOptionPane.showMessageDialog(parent, "Registro elminado con éxito");
+                            CategoriaPage.recagarTabla();
+                        }
+                        default -> JOptionPane.showMessageDialog(parent, "Ocurrió un error al eliminar la categoría");
+                    }
                 }
             }
             case "Producto" -> {
@@ -137,11 +138,21 @@ public class ManageButtonEditorRenderer extends AbstractCellEditor implements Ta
                         JOptionPane.OK_CANCEL_OPTION
                 );
                 
-                if(ProductoControlador.eliminarProducto(id)){
-                        JOptionPane.showMessageDialog(parent, "Registro elminado con éxito");
-                        ProductoPage.recagarTabla();
+                
+                if(respuesta == 0){
+                    int operacion = ProductoControlador.eliminarProducto(id);
                     
-                } else JOptionPane.showMessageDialog(parent, "Ocurrió un error al eliminar el producto");
+                    switch (operacion) {
+                        case 1 -> JOptionPane.showMessageDialog(parent, "No se puede eliminar un producto que se ha vendido");
+                        case 2 -> JOptionPane.showMessageDialog(parent, "No se puede eliminar un producto que se ha comprado");
+                        case 0 -> {
+                            JOptionPane.showMessageDialog(parent, "Registro elminado con éxito");
+                            ProductoPage.recagarTabla();
+                        }
+                        default -> JOptionPane.showMessageDialog(parent, "Ocurrió un error al eliminar el producto");
+                    }
+                }
+                
             }
             case "Usuario" -> {
                 int respuesta = JOptionPane.showConfirmDialog(
@@ -153,13 +164,14 @@ public class ManageButtonEditorRenderer extends AbstractCellEditor implements Ta
                 
                 if(respuesta == 0){
                     int operacion = UsuarioControlador.eliminarUsuario(id);
-                    if(operacion == 1)
-                        JOptionPane.showMessageDialog(parent, "No se puede eliminar a un administrador");
-                    else if(operacion == 0){
-                        JOptionPane.showMessageDialog(parent, "Usuario elminado con éxito");
-                        UsuarioPage.recagarTabla();
-                    } else
-                        JOptionPane.showMessageDialog(parent, "Ocurrió un error al eliminar al usuario");
+                    switch (operacion) {
+                        case 1 -> JOptionPane.showMessageDialog(parent, "No se puede eliminar a un administrador");
+                        case 0 -> {
+                            JOptionPane.showMessageDialog(parent, "Usuario elminado con éxito");
+                            UsuarioPage.recagarTabla();
+                        }
+                        default -> JOptionPane.showMessageDialog(parent, "Ocurrió un error al eliminar al usuario");
+                    }
                 }
             }
             case "Cliente" -> {
@@ -172,13 +184,14 @@ public class ManageButtonEditorRenderer extends AbstractCellEditor implements Ta
                 
                 if(respuesta == 0){
                     int operacion = ClienteControlador.eliminarCliente(id);
-                    if(operacion == 1)
-                        JOptionPane.showMessageDialog(parent, "No se puede eliminar un cliente al que se le ha vendido");
-                    else if(operacion == 0){
-                        JOptionPane.showMessageDialog(parent, "Cliente elminado con éxito");
-                        ClientePage.recagarTabla();
-                    } else
-                        JOptionPane.showMessageDialog(parent, "Ocurrió un error al eliminar el cliente");
+                    switch (operacion) {
+                        case 1 -> JOptionPane.showMessageDialog(parent, "No se puede eliminar un cliente al que se le ha vendido");
+                        case 0 -> {
+                            JOptionPane.showMessageDialog(parent, "Cliente elminado con éxito");
+                            ClientePage.recagarTabla();
+                        }
+                        default -> JOptionPane.showMessageDialog(parent, "Ocurrió un error al eliminar el cliente");
+                    }
                 }
             }
             case "Proveedor" -> {
@@ -191,13 +204,14 @@ public class ManageButtonEditorRenderer extends AbstractCellEditor implements Ta
                 
                 if(respuesta == 0){
                     int operacion = ProveedorControlador.eliminarProveedor(id);
-                    if(operacion == 1)
-                        JOptionPane.showMessageDialog(parent, "No se puede eliminar a un proveedor al que se le ha comprado");
-                    else if(operacion == 0){
-                        JOptionPane.showMessageDialog(parent, "Proveedor elminado con éxito");
-                        ProveedorPage.recagarTabla();
-                    } else
-                        JOptionPane.showMessageDialog(parent, "Ocurrió un error al eliminar al proveedor");
+                    switch (operacion) {
+                        case 1 -> JOptionPane.showMessageDialog(parent, "No se puede eliminar a un proveedor al que se le ha comprado");
+                        case 0 -> {
+                            JOptionPane.showMessageDialog(parent, "Proveedor elminado con éxito");
+                            ProveedorPage.recagarTabla();
+                        }
+                        default -> JOptionPane.showMessageDialog(parent, "Ocurrió un error al eliminar al proveedor");
+                    }
                 }
             }
             

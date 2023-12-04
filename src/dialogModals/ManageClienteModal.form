@@ -34,7 +34,7 @@
                               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="nameInput" alignment="0" max="32767" attributes="0"/>
-                              <Component id="dniInput" alignment="0" max="32767" attributes="0"/>
+                              <Component id="dniRucInput" alignment="0" max="32767" attributes="0"/>
                               <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="direccionInput" alignment="0" min="-2" pref="249" max="-2" attributes="0"/>
                           </Group>
@@ -79,7 +79,7 @@
                   <Group type="102" attributes="0">
                       <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="dniInput" min="-2" pref="37" max="-2" attributes="0"/>
+                      <Component id="dniRucInput" min="-2" pref="37" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
@@ -134,17 +134,17 @@
         <Property name="text" type="java.lang.String" value="Nombre"/>
       </Properties>
     </Component>
-    <Component class="components.jInput" name="dniInput">
+    <Component class="components.jInput" name="dniRucInput">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Ingrese el DNI | RUC"/>
+        <Property name="text" type="java.lang.String" value="Ingrese el DNI"/>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new components.jInput(&quot;Ingrese el DNI | RUC&quot;)"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new components.jInput(&quot;Ingrese el DNI&quot;)"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Dni | RUC"/>
+        <Property name="text" type="java.lang.String" value="Dni"/>
       </Properties>
     </Component>
     <Component class="components.jButton" name="jButton1">
@@ -221,6 +221,9 @@
           </StringArray>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TipoClienteComboBoxActionPerformed"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>

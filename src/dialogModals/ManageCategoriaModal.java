@@ -18,6 +18,8 @@ public class ManageCategoriaModal extends javax.swing.JDialog {
 
     /**
      * Creates new form AddCategoriaModal
+     * @param parent
+     * @param modal
      */
     public ManageCategoriaModal(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -127,16 +129,13 @@ public class ManageCategoriaModal extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void crearNuevaCategoria(){
-        // Crea una nueva instancia de la clase Categoria
         Categoria categoria = new Categoria();
-
-        // Obtiene los valores ingresados en los campos de texto
+        
         String nombre = nameInput.getValue();
         String descripcion = descripcionInput.getValue();
-
-        // Verifica si ambos campos de texto no están vacíos
+        
         if(!nombre.isEmpty() && !descripcion.isEmpty()){
-            // Establece el nombre y descripción en el objeto de la categoría
+            
             categoria.setNombre(nombre);
             categoria.setDescripcion(descripcion);
 

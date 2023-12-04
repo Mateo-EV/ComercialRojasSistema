@@ -30,13 +30,13 @@ public class ClienteControlador {
                 int id = rs.getInt("id");
                 String nombre = rs.getString("nombre");
                 String apellido = rs.getString("apellido");
-                String dni = rs.getString("dni");
+                String dni_ruc = rs.getString("dni_ruc");
                 String email = rs.getString("email");
                 String telefono = rs.getString("telefono");
                 String direccion = rs.getString("direccion");
                 String tipoCliente = rs.getString("tipoCliente");
                 
-                clientes.add(new Cliente(id, nombre, apellido, dni, email, telefono, direccion, tipoCliente));
+                clientes.add(new Cliente(id, nombre, apellido, dni_ruc, email, telefono, direccion, tipoCliente));
             }
             
         } catch (SQLException e) {
@@ -52,7 +52,7 @@ public class ClienteControlador {
             PreparedStatement pst = Conexion.db.prepareStatement("INSERT INTO Cliente VALUES (?, ?, ?, ?, ?, ?, ?)");
             pst.setString(1, cliente.getNombre());
             pst.setString(2, cliente.getApellido());
-            pst.setString(3, cliente.getDni());
+            pst.setString(3, cliente.getDni_ruc());
             pst.setString(4, cliente.getEmail());
             pst.setString(5, cliente.getTelefono());
             pst.setString(6, cliente.getTipoCliente());
@@ -79,14 +79,14 @@ public class ClienteControlador {
                 int id = rs.getInt("id");
                 String nombre = rs.getString("nombre");
                 String apellido = rs.getString("apellido");
-                String dni = rs.getString("dni");
+                String dni_ruc = rs.getString("dni_ruc");
                 String email = rs.getString("email");
                 String telefono = rs.getString("telefono");
                 String direccion = rs.getString("direccion");
                 String tipoCliente = rs.getString("tipoCliente");
                 
                 
-                cliente = new Cliente(id, nombre, apellido, dni, email, telefono, direccion, tipoCliente);
+                cliente = new Cliente(id, nombre, apellido, dni_ruc, email, telefono, direccion, tipoCliente);
             }
             
         } catch (SQLException e) {
@@ -118,11 +118,11 @@ public class ClienteControlador {
     static public boolean actualizarCliente(Cliente cliente){
         boolean respuesta = false;
         try {
-            PreparedStatement pst = Conexion.db.prepareStatement("UPDATE Cliente SET nombre=?, apellido=?, dni=?, email=?, telefono=?, tipoCliente=?, direccion=? WHERE id='" + cliente.getId() +"'");
+            PreparedStatement pst = Conexion.db.prepareStatement("UPDATE Cliente SET nombre=?, apellido=?, dni_ruc=?, email=?, telefono=?, tipoCliente=?, direccion=? WHERE id='" + cliente.getId() +"'");
             
             pst.setString(1, cliente.getNombre());
             pst.setString(2, cliente.getApellido());
-            pst.setString(3, cliente.getDni());
+            pst.setString(3, cliente.getDni_ruc());
             pst.setString(4, cliente.getEmail());
             pst.setString(5, cliente.getTelefono());
             pst.setString(6, cliente.getTipoCliente());

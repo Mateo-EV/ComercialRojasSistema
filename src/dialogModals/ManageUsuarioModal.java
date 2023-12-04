@@ -13,6 +13,7 @@ import controlador.CategoriaControlador;
 import controlador.UsuarioControlador;
 import modelo.Categoria;
 import modelo.Usuario;
+import utils.Validator;
 import vista.dashboard.CategoriaPage;
 import vista.dashboard.UsuarioPage;
 
@@ -30,10 +31,8 @@ public class ManageUsuarioModal extends javax.swing.JDialog {
         initComponents();
         cargarRolesEnCombobox();
     }
-    
+
     private DefaultComboBoxModel RolComboBoxModel = new DefaultComboBoxModel();
-    
-    
 
     private void cargarRolesEnCombobox() {
         RolComboBoxModel.addElement("Seleccionar Rol");
@@ -41,32 +40,33 @@ public class ManageUsuarioModal extends javax.swing.JDialog {
         roles.forEach((rol) -> RolComboBoxModel.insertElementAt(rol, rol.getId()));
         RolComboBox.setModel(RolComboBoxModel);
     }
-    
+
     private String idUsuario;
-    
+
     public ManageUsuarioModal(java.awt.Frame parent, boolean modal, String id) {
         super(parent, modal);
         Usuario usuario = UsuarioControlador.obtenerUsuario(id);
-        
+
         initComponents();
         cargarRolesEnCombobox();
-        
+
         jLabel1.setText("Editar Usuario");
         nameInput.setValue(usuario.getNombre());
         apellidoInput.setValue(usuario.getApellido());
         dniInput.setValue(usuario.getDni());
         emailInput.setValue(usuario.getEmail());
         telefonoInput.setValue(usuario.getTelefono());
-        
-        if(!usuario.getEstado())
+
+        if (!usuario.getEstado()) {
             InactivoRadioButton.setSelected(true);
-        
+        }
+
         RolComboBox.setSelectedIndex(usuario.getIdRol());
-        
+
         jButton1.setText("Guardar");
-        
+
         this.idUsuario = id;
-        
+
     }
 
     /**
@@ -239,110 +239,118 @@ public class ManageUsuarioModal extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(idUsuario != null)
+        if (idUsuario != null)
             editarUsuario();
         else
             crearNuevoUsuario();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void crearNuevoUsuario(){
-        // Crea una nueva instancia de la clase Categoria
-        Usuario usuario = new Usuario();
-
-        // Obtiene los valores ingresados en los campos de texto
-        String nombre = nameInput.getValue();
-        String apellido = apellidoInput.getValue();
-        String dni = dniInput.getValue();
-        String email = emailInput.getValue();
-        String contraseña = passwordInput.getValue();
-        String telefono = telefonoInput.getValue();
-        boolean estado = estadoButtonGroup.getSelection().getActionCommand().equals("Activo");
-
-        // Verifica si ambos campos de texto no están vacíos
-        if(nombre.isEmpty() || apellido.isEmpty() || dni.isEmpty() || email.isEmpty() || contraseña.isEmpty() || telefono.isEmpty()){
-            JOptionPane.showMessageDialog(null, "Complete todos los campos");
-            return;
-        }
-        
-        Rol rol;
-        
+    private void crearNuevoUsuario() {
         try {
-            rol = (Rol) RolComboBox.getSelectedItem();
-        } catch (ClassCastException ex) {
-            JOptionPane.showMessageDialog(null, "Elija un rol para el usuario");
-            return;
-        }
-                
-        usuario.setNombre(nombre);
-        usuario.setApellido(apellido);
-        usuario.setDni(dni);
-        usuario.setEmail(email);
-        usuario.setPassword(contraseña);
-        usuario.setTelefono(telefono);
-        usuario.setEstado(estado);
-        usuario.setRol(rol);
+            Usuario usuario = new Usuario();
 
-        // Intenta crear una nueva categoría utilizando el controlador de categorías
-        if(UsuarioControlador.crearUsuario(usuario)){
-            // Si la categoría se crea con éxito, muestra un mensaje de éxito
-            JOptionPane.showMessageDialog(null, "Registro guardado");
-            UsuarioPage.recagarTabla();
-            dispose();
-        } else {
-            // Si hay un error al crear la categoría, muestra un mensaje de error
-            JOptionPane.showMessageDialog(null, "Error al guardar");
-        }
-        
-    }
-    
-    private void editarUsuario(){
-        Usuario usuario = new Usuario();
-        
-        String nombre = nameInput.getValue();
-        String apellido = apellidoInput.getValue();
-        String dni = dniInput.getValue();
-        String email = emailInput.getValue();
-        String contraseña = passwordInput.getValue();
-        String telefono = telefonoInput.getValue();
-        boolean estado = estadoButtonGroup.getSelection().getActionCommand().equals("Activo");
+            // Obtiene los valores ingresados en los campos de texto
+            String nombre = nameInput.getValue();
+            String apellido = apellidoInput.getValue();
+            String dni = dniInput.getValue();
+            String email = emailInput.getValue();
+            String contraseña = passwordInput.getValue();
+            String telefono = telefonoInput.getValue();
+            boolean estado = estadoButtonGroup.getSelection().getActionCommand().equals("Activo");
 
-        // Verifica si ambos campos de texto no están vacíos
-        if(nombre.isEmpty() || apellido.isEmpty() || dni.isEmpty() || email.isEmpty() || telefono.isEmpty()){
-            JOptionPane.showMessageDialog(null, "Complete todos los campos");
-            return;
-        }
-        
-        Rol rol;
-        
-        try {
-            rol = (Rol) RolComboBox.getSelectedItem();
-        } catch (ClassCastException ex) {
-            JOptionPane.showMessageDialog(null, "Elija un rol para el usuario");
-            return;
-        }
-        
-        usuario.setId(idUsuario);
-        usuario.setNombre(nombre);
-        usuario.setApellido(apellido);
-        usuario.setDni(dni);
-        usuario.setEmail(email);
-        usuario.setPassword(contraseña);
-        usuario.setTelefono(telefono);
-        usuario.setEstado(estado);
-        usuario.setRol(rol);
+            // Verifica si ambos campos de texto no están vacíos
+            if (nombre.isEmpty() || apellido.isEmpty() || dni.isEmpty() || email.isEmpty() || contraseña.isEmpty() || telefono.isEmpty()) {
+                throw new Exception("Complete todos los campos");
+            }
 
-        // Intenta crear una nueva categoría utilizando el controlador de categorías
-        if(UsuarioControlador.actualizarUsuario(usuario)){
-            // Si la categoría se crea con éxito, muestra un mensaje de éxito
-            JOptionPane.showMessageDialog(null, "Registro guardado");
-            UsuarioPage.recagarTabla();
-            dispose();
-        } else {
-            // Si hay un error al crear la categoría, muestra un mensaje de error
-            JOptionPane.showMessageDialog(null, "Error al guardar");
+            Rol rol;
+
+            try {
+                rol = (Rol) RolComboBox.getSelectedItem();
+            } catch (ClassCastException ex) {
+                JOptionPane.showMessageDialog(null, "Elija un rol para el usuario");
+                return;
+            }
+
+            Validator.DNI(dni);
+            Validator.EMAIL(email);
+            Validator.TELEFONO(telefono);
+
+            usuario.setNombre(nombre);
+            usuario.setApellido(apellido);
+            usuario.setDni(dni);
+            usuario.setEmail(email);
+            usuario.setPassword(contraseña);
+            usuario.setTelefono(telefono);
+            usuario.setEstado(estado);
+            usuario.setRol(rol);
+
+            // Intenta crear una nueva categoría utilizando el controlador de categorías
+            if (UsuarioControlador.crearUsuario(usuario)) {
+                // Si la categoría se crea con éxito, muestra un mensaje de éxito
+                JOptionPane.showMessageDialog(null, "Registro guardado");
+                UsuarioPage.recagarTabla();
+                dispose();
+            } else {
+                // Si hay un error al crear la categoría, muestra un mensaje de error
+                JOptionPane.showMessageDialog(null, "Error al guardar");
+            }
+
+        } catch (Exception error) {
+            JOptionPane.showMessageDialog(null, error.getMessage());
         }
     }
-    
+
+    private void editarUsuario() {
+        try {
+            Usuario usuario = new Usuario();
+            String nombre = nameInput.getValue();
+            String apellido = apellidoInput.getValue();
+            String dni = dniInput.getValue();
+            String email = emailInput.getValue();
+            String contraseña = passwordInput.getValue();
+            String telefono = telefonoInput.getValue();
+            boolean estado = estadoButtonGroup.getSelection().getActionCommand().equals("Activo");
+
+            // Verifica si ambos campos de texto no están vacíos
+            if (nombre.isEmpty() || apellido.isEmpty() || dni.isEmpty() || email.isEmpty() || telefono.isEmpty()) {
+                throw new Exception("Complete todos los campos");
+            }
+
+            Rol rol;
+
+            try {
+                rol = (Rol) RolComboBox.getSelectedItem();
+            } catch (ClassCastException ex) {
+                JOptionPane.showMessageDialog(null, "Elija un rol para el usuario");
+                return;
+            }
+
+            usuario.setId(idUsuario);
+            usuario.setNombre(nombre);
+            usuario.setApellido(apellido);
+            usuario.setDni(dni);
+            usuario.setEmail(email);
+            usuario.setPassword(contraseña);
+            usuario.setTelefono(telefono);
+            usuario.setEstado(estado);
+            usuario.setRol(rol);
+
+            // Intenta crear una nueva categoría utilizando el controlador de categorías
+            if (UsuarioControlador.actualizarUsuario(usuario)) {
+                // Si la categoría se crea con éxito, muestra un mensaje de éxito
+                JOptionPane.showMessageDialog(null, "Registro guardado");
+                UsuarioPage.recagarTabla();
+                dispose();
+            } else {
+                // Si hay un error al crear la categoría, muestra un mensaje de error
+                JOptionPane.showMessageDialog(null, "Error al guardar");
+            }
+        } catch (Exception error) {
+            JOptionPane.showMessageDialog(null, error.getMessage());
+        }
+    }
+
     /**
      * @param args the command line arguments
      */

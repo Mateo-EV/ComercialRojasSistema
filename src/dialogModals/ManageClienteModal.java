@@ -5,11 +5,10 @@
 package dialogModals;
 
 import javax.swing.JOptionPane;
-import modelo.Rol;
 import controlador.ClienteControlador;
 import modelo.Cliente;
+import utils.Validator;
 import vista.dashboard.ClientePage;
-import vista.dashboard.UsuarioPage;
 
 /**
  *
@@ -19,34 +18,37 @@ public class ManageClienteModal extends javax.swing.JDialog {
 
     /**
      * Creates new form AddCategoriaModal
+     *
+     * @param parent
+     * @param modal
      */
     public ManageClienteModal(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
-    
+
     private String idCliente;
-    
+
     public ManageClienteModal(java.awt.Frame parent, boolean modal, String id) {
         super(parent, modal);
         Cliente cliente = ClienteControlador.obtenerCliente(id);
-        
+
         initComponents();
-        
+
         jLabel1.setText("Editar Cliente");
         nameInput.setValue(cliente.getNombre());
         apellidoInput.setValue(cliente.getApellido());
-        dniInput.setValue(cliente.getDni());
+        dniRucInput.setValue(cliente.getDni_ruc());
         emailInput.setValue(cliente.getEmail());
         telefonoInput.setValue(cliente.getTelefono());
         direccionInput.setValue(cliente.getDireccion());
-        
+
         TipoClienteComboBox.setSelectedItem(cliente.getTipoCliente());
-        
+
         jButton1.setText("Guardar");
-        
+
         this.idCliente = id;
-        
+
     }
 
     /**
@@ -61,7 +63,7 @@ public class ManageClienteModal extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         nameInput = new components.jInput("Ingrese el nombre");
         jLabel2 = new javax.swing.JLabel();
-        dniInput = new components.jInput("Ingrese el DNI | RUC");
+        dniRucInput = new components.jInput("Ingrese el DNI");
         jLabel3 = new javax.swing.JLabel();
         jButton1 = new components.jButton();
         apellidoInput = new components.jInput("Ingrese el apellido");
@@ -85,9 +87,9 @@ public class ManageClienteModal extends javax.swing.JDialog {
 
         jLabel2.setText("Nombre");
 
-        dniInput.setText("Ingrese el DNI | RUC");
+        dniRucInput.setText("Ingrese el DNI");
 
-        jLabel3.setText("Dni | RUC");
+        jLabel3.setText("Dni");
 
         jButton1.setText("Agregar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -115,6 +117,11 @@ public class ManageClienteModal extends javax.swing.JDialog {
         jLabel9.setText("Tipo de Cliente");
 
         TipoClienteComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Persona", "Empresa" }));
+        TipoClienteComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TipoClienteComboBoxActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -131,7 +138,7 @@ public class ManageClienteModal extends javax.swing.JDialog {
                                 .addComponent(jLabel2)
                                 .addComponent(jLabel3)
                                 .addComponent(nameInput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(dniInput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(dniRucInput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel8)
                                 .addComponent(direccionInput, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGap(34, 34, 34)
@@ -166,7 +173,7 @@ public class ManageClienteModal extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(dniInput, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(dniRucInput, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -194,90 +201,119 @@ public class ManageClienteModal extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(idCliente != null)
+        if (idCliente != null)
             editarCliente();
         else
             crearNuevoCliente();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void crearNuevoCliente(){
-        // Crea una nueva instancia de la clase Categoria
-        Cliente cliente = new Cliente();
-
-        // Obtiene los valores ingresados en los campos de texto
-        String nombre = nameInput.getValue();
-        String apellido = apellidoInput.getValue();
-        String dni = dniInput.getValue();
-        String email = emailInput.getValue();
-        String telefono = telefonoInput.getValue();
-        String direccion = direccionInput.getValue();
-        String tipoCliente = TipoClienteComboBox.getSelectedItem().toString();
-
-        // Verifica si ambos campos de texto no están vacíos
-        if(nombre.isEmpty() || apellido.isEmpty() || dni.isEmpty() || email.isEmpty() || telefono.isEmpty()){
-            JOptionPane.showMessageDialog(null, "Complete todos los campos");
-            return;
-        }      
-        cliente.setNombre(nombre);
-        cliente.setApellido(apellido);
-        cliente.setDni(dni);
-        cliente.setEmail(email);
-        cliente.setTelefono(telefono);
-        cliente.setDireccion(direccion);
-        cliente.setTipoCliente(tipoCliente);
-
-        // Intenta crear una nueva categoría utilizando el controlador de categorías
-        if(ClienteControlador.crearCliente(cliente)){
-            // Si la categoría se crea con éxito, muestra un mensaje de éxito
-            JOptionPane.showMessageDialog(null, "Registro guardado");
-            ClientePage.recagarTabla();
-            dispose();
+    private void TipoClienteComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TipoClienteComboBoxActionPerformed
+        if(TipoClienteComboBox.getSelectedItem().toString().equals("Persona")){
+            jLabel3.setText("DNI");
+            dniRucInput.setPlaceholder("Ingrese el DNI");
         } else {
-            // Si hay un error al crear la categoría, muestra un mensaje de error
-            JOptionPane.showMessageDialog(null, "Error al guardar");
+            jLabel3.setText("RUC");
+            dniRucInput.setPlaceholder("Ingrese el RUC");
         }
-        
-    }
-    
-    private void editarCliente(){
-        Cliente cliente = new Cliente();
+    }//GEN-LAST:event_TipoClienteComboBoxActionPerformed
 
-        // Obtiene los valores ingresados en los campos de texto
-        String nombre = nameInput.getValue();
-        String apellido = apellidoInput.getValue();
-        String dni = dniInput.getValue();
-        String email = emailInput.getValue();
-        String telefono = telefonoInput.getValue();
-        String direccion = direccionInput.getValue();
-        String tipoCliente = TipoClienteComboBox.getSelectedItem().toString();
+    private void crearNuevoCliente() {
+        try {
+            Cliente cliente = new Cliente();
 
-        // Verifica si ambos campos de texto no están vacíos
-        if(nombre.isEmpty() || apellido.isEmpty() || dni.isEmpty() || email.isEmpty() || telefono.isEmpty()){
-            JOptionPane.showMessageDialog(null, "Complete todos los campos");
-            return;
-        }
-        
-        cliente.setId(Integer.parseInt(idCliente));
-        cliente.setNombre(nombre);
-        cliente.setApellido(apellido);
-        cliente.setDni(dni);
-        cliente.setEmail(email);
-        cliente.setTelefono(telefono);
-        cliente.setDireccion(direccion);
-        cliente.setTipoCliente(tipoCliente);
+            // Obtiene los valores ingresados en los campos de texto
+            String nombre = nameInput.getValue();
+            String apellido = apellidoInput.getValue();
+            String dniRuc = dniRucInput.getValue();
+            String email = emailInput.getValue();
+            String telefono = telefonoInput.getValue();
+            String direccion = direccionInput.getValue();
+            String tipoCliente = TipoClienteComboBox.getSelectedItem().toString();
 
-        // Intenta crear una nueva categoría utilizando el controlador de categorías
-        if(ClienteControlador.actualizarCliente(cliente)){
-            // Si la categoría se crea con éxito, muestra un mensaje de éxito
-            JOptionPane.showMessageDialog(null, "Registro guardado");
-            ClientePage.recagarTabla();
-            dispose();
-        } else {
-            // Si hay un error al crear la categoría, muestra un mensaje de error
-            JOptionPane.showMessageDialog(null, "Error al guardar");
+            // Verifica si ambos campos de texto no están vacíos
+            if (nombre.isEmpty() || apellido.isEmpty() || dniRuc.isEmpty() || email.isEmpty() || telefono.isEmpty()) {
+                throw new Exception("Complete todos los campos");
+            }
+
+            Validator.EMAIL(email);
+            if (tipoCliente.equals("Persona")) {
+                Validator.DNI(dniRuc);
+            } else {
+                Validator.RUC(dniRuc);
+            }
+
+            cliente.setNombre(nombre);
+            cliente.setApellido(apellido);
+            cliente.setDni_ruc(dniRuc);
+            cliente.setEmail(email);
+            cliente.setTelefono(telefono);
+            cliente.setDireccion(direccion);
+            cliente.setTipoCliente(tipoCliente);
+
+            // Intenta crear una nueva categoría utilizando el controlador de categorías
+            if (ClienteControlador.crearCliente(cliente)) {
+                // Si la categoría se crea con éxito, muestra un mensaje de éxito
+                JOptionPane.showMessageDialog(null, "Registro guardado");
+                ClientePage.recagarTabla();
+                dispose();
+            } else {
+                // Si hay un error al crear la categoría, muestra un mensaje de error
+                JOptionPane.showMessageDialog(null, "Error al guardar");
+            }
+        } catch (Exception error) {
+            JOptionPane.showMessageDialog(null, error.getMessage());
         }
     }
-    
+
+    private void editarCliente() {
+        try {
+            Cliente cliente = new Cliente();
+
+            // Obtiene los valores ingresados en los campos de texto
+            String nombre = nameInput.getValue();
+            String apellido = apellidoInput.getValue();
+            String dniRuc = dniRucInput.getValue();
+            String email = emailInput.getValue();
+            String telefono = telefonoInput.getValue();
+            String direccion = direccionInput.getValue();
+            String tipoCliente = TipoClienteComboBox.getSelectedItem().toString();
+
+            // Verifica si ambos campos de texto no están vacíos
+            if (nombre.isEmpty() || apellido.isEmpty() || dniRuc.isEmpty() || email.isEmpty() || telefono.isEmpty()) {
+                throw new Exception("Complete todos los campos");
+            }
+
+            Validator.EMAIL(email);
+            if (tipoCliente.equals("Persona")) {
+                Validator.DNI(dniRuc);
+            } else {
+                Validator.RUC(dniRuc);
+            }
+
+            cliente.setId(Integer.parseInt(idCliente));
+            cliente.setNombre(nombre);
+            cliente.setApellido(apellido);
+            cliente.setDni_ruc(dniRuc);
+            cliente.setEmail(email);
+            cliente.setTelefono(telefono);
+            cliente.setDireccion(direccion);
+            cliente.setTipoCliente(tipoCliente);
+
+            // Intenta crear una nueva categoría utilizando el controlador de categorías
+            if (ClienteControlador.actualizarCliente(cliente)) {
+                // Si la categoría se crea con éxito, muestra un mensaje de éxito
+                JOptionPane.showMessageDialog(null, "Registro guardado");
+                ClientePage.recagarTabla();
+                dispose();
+            } else {
+                // Si hay un error al crear la categoría, muestra un mensaje de error
+                JOptionPane.showMessageDialog(null, "Error al guardar");
+            }
+        } catch (Exception error) {
+            JOptionPane.showMessageDialog(null, error.getMessage());
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -302,7 +338,7 @@ public class ManageClienteModal extends javax.swing.JDialog {
     private javax.swing.JComboBox<String> TipoClienteComboBox;
     private components.jInput apellidoInput;
     private components.jInput direccionInput;
-    private components.jInput dniInput;
+    private components.jInput dniRucInput;
     private components.jInput emailInput;
     private components.jButton jButton1;
     private javax.swing.JLabel jLabel1;

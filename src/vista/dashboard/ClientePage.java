@@ -76,7 +76,7 @@ public class ClientePage extends javax.swing.JPanel {
                 cliente.getId(),
                 cliente.getNombre(),
                 cliente.getApellido(),
-                cliente.getDni(),
+                cliente.getDni_ruc(),
                 cliente.getEmail(),
                 cliente.getTelefono(),
                 cliente.getDireccion(),
