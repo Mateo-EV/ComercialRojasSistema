@@ -9,8 +9,8 @@ package modelo;
  * @author intel
  */
 public class Rol {
-    static int ADMINISTRADOR = 0;
-    static int CAJERO = 1;
+    static public int ADMINISTRADOR = 1;
+    static public int CAJERO = 2;
     
     private int id;
     private String nombre;

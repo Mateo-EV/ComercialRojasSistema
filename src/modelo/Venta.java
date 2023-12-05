@@ -18,7 +18,7 @@ public class Venta {
     private int idCliente;
     private Cliente cliente;
     
-    private int idUsuario;
+    private String idUsuario;
     private Usuario usuario;
     
     private double ganancia;
@@ -29,7 +29,7 @@ public class Venta {
     
     public Venta(){};
     
-    public Venta(int id, int idCliente, int idUsuario, double ganancia, LocalDateTime fecha) {
+    public Venta(int id, int idCliente, String idUsuario, double ganancia, LocalDateTime fecha) {
         this.id = id;
         this.idCliente = idCliente;
         this.idUsuario = idUsuario;
@@ -69,11 +69,11 @@ public class Venta {
         this.cliente = cliente;
     }
 
-    public int getIdUsuario() {
+    public String getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(int idUsuario) {
+    public void setIdUsuario(String idUsuario) {
         this.idUsuario = idUsuario;
     }
 

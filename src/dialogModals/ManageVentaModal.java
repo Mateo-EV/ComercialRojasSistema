@@ -43,15 +43,31 @@ public class ManageVentaModal extends javax.swing.JDialog {
     private void cargarClientes(){
         clientes = ClienteControlador.obtenerClientes();
         ClienteComboBoxModel.addElement("Seleccionar Cliente");
-        clientes.forEach(cliente -> ClienteComboBoxModel.insertElementAt(cliente, cliente.getId()));
+        int indexSelected = 0;
+        for (int i = 0; i < clientes.size(); i++) {
+            ClienteComboBoxModel.addElement(clientes.get(i));
+            if(this.idCliente == clientes.get(i).getId())
+                indexSelected = i+1;  
+        }
         ClientesComboBox.setModel(ClienteComboBoxModel);
+        if(indexSelected >= 1){
+            ClientesComboBox.setSelectedIndex(indexSelected);
+        }
     }
     
     private void cargarProductos(){
         productos = ProductoControlador.obtenerProductos();
         ProductoComboBoxModel.addElement("Seleccionar Producto");
-        productos.forEach(producto -> ProductoComboBoxModel.insertElementAt(producto, producto.getId()));
+        int indexSelected = 0;
+        for (int i = 0; i < productos.size(); i++) {
+            ProductoComboBoxModel.addElement(productos.get(i));
+            if(this.idProducto == productos.get(i).getId())
+                indexSelected = i+1;  
+        }
         ProductosComboBox.setModel(ProductoComboBoxModel);
+        if(indexSelected >= 1){
+            ProductosComboBox.setSelectedIndex(indexSelected);
+        }
     }
     
    
@@ -60,20 +76,65 @@ public class ManageVentaModal extends javax.swing.JDialog {
     private DefaultComboBoxModel ProductoComboBoxModel = new DefaultComboBoxModel();
     
     private String idVenta;
+    private int idCliente = -1;
+    private int idProducto = -1;
     
     public ManageVentaModal(java.awt.Frame parent, boolean modal, String id) {
-//        super(parent, modal);
-//        Proveedor proveedor = ProveedorControlador.obtenerProveedor(id);
-//        
-//        initComponents();
-//        
-//        jLabel1.setText("Editar Proveedor");
-//        telefonoInput.setValue(proveedor.getTelefono());
-//        BuscarClienteInput.setValue(proveedor.getDireccion());
-//        
-//        AgregarProductoButton.setText("Guardar");
-//        
-//        this.idProveedor = id;
+        super(parent, modal);
+        
+        Venta venta = VentaControlador.obtenerVenta(id);
+        initComponents();
+        
+        jLabel1.setText("Editar Venta");
+        this.idCliente = venta.getIdCliente();
+        
+        crearVentaButton.setText("Guardar");
+        cargarClientes();
+        cargarProductos();
+        
+        venta.getVentasProducto().forEach((ventaProducto) -> {
+            tablaProductosModel.addRow(new Object[]{
+                ventaProducto,
+                ventaProducto.getCantidad(),
+                ventaProducto.getPrecioUnitario(),
+                ventaProducto.getSubTotal(),
+                ventaProducto.calcularTotal(),
+            });
+        });
+        
+        cargarDatosFinales();
+        
+        this.idVenta = id;
+        
+    }
+    
+    public ManageVentaModal(java.awt.Frame parent, boolean modal, String id, boolean view) {
+        super(parent, modal);
+        
+        Venta venta = VentaControlador.obtenerVenta(id);
+        initComponents();
+        
+        jLabel1.setText("Detalle de la Venta");
+        this.idCliente = venta.getIdCliente();
+        
+        cargarClientes();
+        cargarProductos();
+        
+        venta.getVentasProducto().forEach((ventaProducto) -> {
+            tablaProductosModel.addRow(new Object[]{
+                ventaProducto,
+                ventaProducto.getCantidad(),
+                ventaProducto.getPrecioUnitario(),
+                ventaProducto.getSubTotal(),
+                ventaProducto.calcularTotal(),
+            });
+        });
+        
+        cargarDatosFinales();
+        
+        crearVentaButton.setVisible(false);
+        
+        this.idVenta = id;
         
     }
 

@@ -16,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 import modelo.Venta;
 import modelo.Usuario;
 import modelo.Cliente;
+import modelo.Producto;
 import modelo.VentaProducto;
 
 /**
@@ -106,5 +107,47 @@ public class VentaControlador {
         
         return respuesta;
     }
-    
+   
+    static public Venta obtenerVenta(String idVenta){
+        String sql = "SELECT * FROM Venta WHERE id='" + idVenta + "'";
+        Venta venta = null;
+        try {
+            Statement st = Conexion.db.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while(rs.next()){
+                int id = rs.getInt("id");
+                String idUsuario = rs.getString("idUsuario");
+                int idCliente = rs.getInt("idCliente");
+                double ganancia = rs.getDouble("ganancia");
+                
+                String fechaSinFormatear = rs.getString("fecha");
+                int lastIndex = fechaSinFormatear.lastIndexOf(".");
+                
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                LocalDateTime fecha = LocalDateTime.parse(fechaSinFormatear.substring(0, lastIndex), formatter);
+                venta = new Venta(id, idCliente, idUsuario, ganancia, fecha);
+                
+                rs = st.executeQuery("SELECT *, (SELECT nombre FROM Producto WHERE Producto.id = idProducto) as ProductoNombre FROM Venta_Producto WHERE idVenta='" + idVenta +"'");
+                while(rs.next()){
+                    int idProducto = rs.getInt("idProducto");
+                    int cantidad = rs.getInt("cantidad");
+                    double precioUnitario = rs.getDouble("precioUnitario");
+                    double total = rs.getDouble("total");
+                    String productoNombre = rs.getString("ProductoNombre");
+                    
+                    VentaProducto ventaProducto = new VentaProducto(id, idProducto, cantidad, precioUnitario, total);
+                    ventaProducto.setProducto(new Producto());
+                    ventaProducto.getProducto().setNombre(productoNombre);
+                    venta.ventasProducto.add(ventaProducto);
+                }
+                
+            }
+            
+        } catch (SQLException e) {
+            // Captura cualquier excepción SQL que pueda ocurrir durante la recuperación y muestra un mensaje de error
+            System.out.println("Error: " + e.getMessage());
+        }
+        
+        return venta;
+    }
 }

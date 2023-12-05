@@ -4,6 +4,7 @@
  */
 package components;
 
+import conexion.Conexion;
 import controlador.CategoriaControlador;
 import controlador.ClienteControlador;
 import controlador.ProductoControlador;
@@ -14,9 +15,12 @@ import dialogModals.ManageClienteModal;
 import dialogModals.ManageProductoModal;
 import dialogModals.ManageProveedorModal;
 import dialogModals.ManageUsuarioModal;
+import dialogModals.ManageVentaModal;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Map;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JPanel;
@@ -24,6 +28,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
+import modelo.Rol;
 import vista.dashboard.CategoriaPage;
 import vista.dashboard.ClientePage;
 import vista.dashboard.ProductoPage;
@@ -43,15 +48,40 @@ public class ManageButtonEditorRenderer extends AbstractCellEditor implements Ta
     public java.awt.Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
         JPanel panel = new JPanel();
         
+        Map<String, Object> props = (Map<String, Object>) value;
+        String model = (String) props.get("model");
+        Boolean isVentaModel = model.equals("Venta");
+        Boolean passed15Minutes = false;
+        if(isVentaModel){
+            LocalDateTime fecha = (LocalDateTime) props.get("fecha");
+            Duration duration = Duration.between(fecha, LocalDateTime.now());
+            passed15Minutes = duration.toMinutes() > 15;
+        }
+        
         EDITAR = new JButton("Editar");
         ELIMINAR = new JButton("Eliminar");
+        
+        int rolUsuario = Conexion.session.getIdRol();
+        Boolean isAllowedToEdit = ((rolUsuario == Rol.ADMINISTRADOR && (!isVentaModel || !passed15Minutes)) || (rolUsuario == Rol.CAJERO && isVentaModel && !passed15Minutes));
+        Boolean isAllowedToDelete = ((rolUsuario == Rol.ADMINISTRADOR && (!isVentaModel || !passed15Minutes)) || (rolUsuario == Rol.CAJERO && model.equals("Venta")));
 
-        EDITAR.setBackground(new Color(255, 200, 0));
+        
         EDITAR.setFont(new java.awt.Font("Segoe UI", 1, 12));
+        
+        if(isAllowedToEdit){
+            props.put("view", false);
+            EDITAR.setBackground(new Color(255, 200, 0));
+        } else {
+            props.put("view", true);
+            EDITAR.setBackground(Color.GREEN);
+            EDITAR.setText("Ver");
+        }
+        
+        ELIMINAR.setVisible(isAllowedToDelete);
         
         EDITAR.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EditarButtonActionPerformed((Map<String, Object>) value);
+                EditarButtonActionPerformed(props);
             }
         });
         
@@ -60,7 +90,7 @@ public class ManageButtonEditorRenderer extends AbstractCellEditor implements Ta
         
         ELIMINAR.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EliminarButtonActionPerformed((Map<String, Object>) value);
+                EliminarButtonActionPerformed(props);
             }
         });
        
@@ -100,6 +130,14 @@ public class ManageButtonEditorRenderer extends AbstractCellEditor implements Ta
                 ManageProveedorModal dialog = new ManageProveedorModal(parent, true, id);
                 dialog.setLocationRelativeTo(null);
                 dialog.setVisible(true);
+            }
+            case "Venta" -> {
+                ManageVentaModal dialog = null;
+                if((Boolean) props.get("view")) dialog = new ManageVentaModal(parent, true, id, true);
+                else dialog = new ManageVentaModal(parent, true, id);
+                dialog.setLocationRelativeTo(null);
+                dialog.setVisible(true);
+                
             }
         }
     }

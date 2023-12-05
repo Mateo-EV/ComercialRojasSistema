@@ -146,6 +146,7 @@ public class VentaPage extends javax.swing.JPanel {
             Map<String, Object> manageModelProps = new HashMap();
             manageModelProps.put("model", "Venta");
             manageModelProps.put("idModel", venta.getId());
+            manageModelProps.put("fecha", venta.getFecha());
             
             Object fila[] = {
                 venta.getId(),
