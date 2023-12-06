@@ -8,7 +8,9 @@ import controlador.ClienteControlador;
 import controlador.ProductoControlador;
 import controlador.ProveedorControlador;
 import controlador.VentaControlador;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import modelo.Cliente;
@@ -71,7 +73,7 @@ public class ManageVentaModal extends javax.swing.JDialog {
     }
     
    
-    private DefaultTableModel tablaProductosModel = new DefaultTableModel(new Object[]{"Nombre","Cantidad","PrecioUnitario","SubTotal","Total"}, 0);
+    private DefaultTableModel tablaProductosModel = new DefaultTableModel(new Object[]{"Nombre","Cantidad","PrecioUnitario","SubTotal","Total", ""}, 0);
     private DefaultComboBoxModel ClienteComboBoxModel = new DefaultComboBoxModel();
     private DefaultComboBoxModel ProductoComboBoxModel = new DefaultComboBoxModel();
     
@@ -128,6 +130,7 @@ public class ManageVentaModal extends javax.swing.JDialog {
                 ventaProducto.getPrecioUnitario(),
                 ventaProducto.getSubTotal(),
                 ventaProducto.calcularTotal(),
+                
             });
         });
         
@@ -364,14 +367,19 @@ public class ManageVentaModal extends javax.swing.JDialog {
         ventaProducto.setProducto(producto);
         ventaProducto.setPrecioUnitario(producto.getPrecio());
         ventaProducto.setCantidad(cantidadSolicitada);
+        Map<String, Object> manageModelProps = new HashMap();
+        manageModelProps.put("model", "ProductoDetalleVenta");
+        manageModelProps.put("idModel", producto.getId());
         
         tablaProductosModel.addRow(
+            
             new Object[]{
                 ventaProducto,
                 ventaProducto.getCantidad(),
                 ventaProducto.getPrecioUnitario(),
                 ventaProducto.getSubTotal(),
                 ventaProducto.calcularTotal(),
+                manageModelProps
             }
         );
         

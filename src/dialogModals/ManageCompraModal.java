@@ -373,9 +373,9 @@ public class ManageCompraModal extends javax.swing.JDialog {
     }//GEN-LAST:event_crearVentaButtonActionPerformed
 
     private void BuscarProveedorInputKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BuscarProveedorInputKeyTyped
-        String nombreCliente = BuscarProveedorInput.getValue();
+        String nombreProveedor = BuscarProveedorInput.getValue();
         List <Proveedor> clientesFiltrados = proveedores.stream()
-                .filter(cliente -> cliente.toString().toLowerCase().contains(nombreCliente.toLowerCase()))
+                .filter(cliente -> cliente.toString().toLowerCase().contains(nombreProveedor.toLowerCase()))
                 .collect(Collectors.toList());
         
         ProveedorComboBoxModel.removeAllElements();
