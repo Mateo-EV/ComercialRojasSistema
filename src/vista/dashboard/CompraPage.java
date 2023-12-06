@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import components.ManageButtonCellRenderer;
 import components.ManageButtonEditorRenderer;
 import controlador.CompraControlador;
+import dialogModals.ManageCompraModal;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
@@ -120,7 +121,7 @@ public class CompraPage extends javax.swing.JPanel {
 
     private void OpenModalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenModalButtonActionPerformed
         // Crea una instancia del modal de agregar categoría y lo muestra en el centro de la pantalla
-        ManageCategoriaModal dialog = new ManageCategoriaModal(parent, true);
+        ManageCompraModal dialog = new ManageCompraModal(parent, true);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
     }//GEN-LAST:event_OpenModalButtonActionPerformed

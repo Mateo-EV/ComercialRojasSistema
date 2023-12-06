@@ -11,7 +11,7 @@ import controlador.VentaControlador;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
-import modelo.Cliente;
+import modelo.Proveedor;
 import modelo.Producto;
 import modelo.Venta;
 
@@ -25,33 +25,33 @@ import vista.dashboard.VentaPage;
  *
  * @author intel
  */
-public class ManageVentaModal extends javax.swing.JDialog {
+public class ManageCompraModal extends javax.swing.JDialog {
 
     /**
      * Creates new form AddCategoriaModal
      */
-    public ManageVentaModal(java.awt.Frame parent, boolean modal) {
+    public ManageCompraModal(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        cargarClientes();
+        cargarProveedores();
         cargarProductos();
     }
     
-    private List<Cliente> clientes;
+    private List<Proveedor> proveedores;
     private List<Producto> productos;
     
-    private void cargarClientes(){
-        clientes = ClienteControlador.obtenerClientes();
-        ClienteComboBoxModel.addElement("Seleccionar Cliente");
+    private void cargarProveedores(){
+        proveedores = ProveedorControlador.obtenerProveedores();
+        ProveedorComboBoxModel.addElement("Seleccionar Proveedor");
         int indexSelected = 0;
-        for (int i = 0; i < clientes.size(); i++) {
-            ClienteComboBoxModel.addElement(clientes.get(i));
-            if(this.idCliente == clientes.get(i).getId())
+        for (int i = 0; i < proveedores.size(); i++) {
+            ProveedorComboBoxModel.addElement(proveedores.get(i));
+            if(this.idProveedor == proveedores.get(i).getId())
                 indexSelected = i+1;  
         }
-        ClientesComboBox.setModel(ClienteComboBoxModel);
+        ProveedoresComboBox.setModel(ProveedorComboBoxModel);
         if(indexSelected >= 1){
-            ClientesComboBox.setSelectedIndex(indexSelected);
+            ProveedoresComboBox.setSelectedIndex(indexSelected);
         }
     }
     
@@ -72,24 +72,24 @@ public class ManageVentaModal extends javax.swing.JDialog {
     
    
     private DefaultTableModel tablaProductosModel = new DefaultTableModel(new Object[]{"Nombre","Cantidad","PrecioUnitario","SubTotal","Total"}, 0);
-    private DefaultComboBoxModel ClienteComboBoxModel = new DefaultComboBoxModel();
+    private DefaultComboBoxModel ProveedorComboBoxModel = new DefaultComboBoxModel();
     private DefaultComboBoxModel ProductoComboBoxModel = new DefaultComboBoxModel();
     
-    private String idVenta;
-    private int idCliente = -1;
+    private String idCompra;
+    private int idProveedor = -1;
     private int idProducto = -1;
     
-    public ManageVentaModal(java.awt.Frame parent, boolean modal, String id) {
+    public ManageCompraModal(java.awt.Frame parent, boolean modal, String id) {
         super(parent, modal);
         
         Venta venta = VentaControlador.obtenerVenta(id);
         initComponents();
         
-        jLabel1.setText("Editar Venta");
-        this.idCliente = venta.getIdCliente();
+        jLabel1.setText("Editar Compra");
+        this.idProveedor = venta.getIdCliente();
         
         crearVentaButton.setText("Guardar");
-        cargarClientes();
+        cargarProveedores();
         cargarProductos();
         
         venta.getVentasProducto().forEach((ventaProducto) -> {
@@ -104,20 +104,20 @@ public class ManageVentaModal extends javax.swing.JDialog {
         
         cargarDatosFinales();
         
-        this.idVenta = id;
+        this.idCompra = id;
         
     }
     
-    public ManageVentaModal(java.awt.Frame parent, boolean modal, String id, boolean view) {
+    public ManageCompraModal(java.awt.Frame parent, boolean modal, String id, boolean view) {
         super(parent, modal);
         
         Venta venta = VentaControlador.obtenerVenta(id);
         initComponents();
         
         jLabel1.setText("Detalle de la Venta");
-        this.idCliente = venta.getIdCliente();
+        this.idProveedor = venta.getIdCliente();
         
-        cargarClientes();
+        cargarProveedores();
         jLabel5.setText("Usuario");
         
         
@@ -133,19 +133,19 @@ public class ManageVentaModal extends javax.swing.JDialog {
         
         cargarDatosFinales();
         
-        ClientesComboBox.setEnabled(false);
+        ProveedoresComboBox.setEnabled(false);
         ProductoComboBoxModel.addElement(venta.getUsuario().getNombre());
         ProductosComboBox.setModel(ProductoComboBoxModel);
         ProductosComboBox.setEnabled(false);
         this.remove(crearVentaButton);
         AgregarProductoButton.setEnabled(false);
-        BuscarClienteInput.setVisible(false);
+        BuscarProveedorInput.setVisible(false);
         BuscarProductoInput.setPlaceholder("");
         BuscarProductoInput.setEnabled(false);
           
         cantidadInput.setEnabled(false);
         
-        this.idVenta = id;
+        this.idCompra = id;
         
     }
 
@@ -164,16 +164,12 @@ public class ManageVentaModal extends javax.swing.JDialog {
         jLabel5 = new javax.swing.JLabel();
         cantidadInput = new components.jInput("");
         jLabel7 = new javax.swing.JLabel();
-        BuscarClienteInput = new components.jInput("Buscar Cliente");
-        ClientesComboBox = new javax.swing.JComboBox<>();
+        BuscarProveedorInput = new components.jInput("Buscar Proveedor");
+        ProveedoresComboBox = new javax.swing.JComboBox<>();
         ProductosComboBox = new javax.swing.JComboBox<>();
         BuscarProductoInput = new components.jInput("Buscar Producto");
         jScrollPane1 = new javax.swing.JScrollPane();
         TablaProductos = new javax.swing.JTable();
-        jLabel3 = new javax.swing.JLabel();
-        IGVInput = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        subTotalInput = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         TotalInput = new javax.swing.JTextField();
         crearVentaButton = new components.jButton();
@@ -182,9 +178,9 @@ public class ManageVentaModal extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Crear Venta");
+        jLabel1.setText("Crear Compra");
 
-        jLabel2.setText("Cliente");
+        jLabel2.setText("Proveedor");
 
         AgregarProductoButton.setText("Añadir");
         AgregarProductoButton.addActionListener(new java.awt.event.ActionListener() {
@@ -199,10 +195,10 @@ public class ManageVentaModal extends javax.swing.JDialog {
 
         jLabel7.setText("Cantidad");
 
-        BuscarClienteInput.setText("Buscar Cliente");
-        BuscarClienteInput.addKeyListener(new java.awt.event.KeyAdapter() {
+        BuscarProveedorInput.setText("Buscar Proveedor");
+        BuscarProveedorInput.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                BuscarClienteInputKeyTyped(evt);
+                BuscarProveedorInputKeyTyped(evt);
             }
         });
 
@@ -216,19 +212,11 @@ public class ManageVentaModal extends javax.swing.JDialog {
         TablaProductos.setModel(tablaProductosModel);
         jScrollPane1.setViewportView(TablaProductos);
 
-        jLabel3.setText("SubTotal");
-
-        IGVInput.setEnabled(false);
-
-        jLabel4.setText("IGV");
-
-        subTotalInput.setEnabled(false);
-
         jLabel6.setText("Total");
 
         TotalInput.setEnabled(false);
 
-        crearVentaButton.setText("Crear Venta");
+        crearVentaButton.setText("Crear Compra");
         crearVentaButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 crearVentaButtonActionPerformed(evt);
@@ -248,11 +236,11 @@ public class ManageVentaModal extends javax.swing.JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel2)
                             .addComponent(jLabel5)
-                            .addComponent(ClientesComboBox, 0, 249, Short.MAX_VALUE)
+                            .addComponent(ProveedoresComboBox, 0, 249, Short.MAX_VALUE)
                             .addComponent(ProductosComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(BuscarClienteInput, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(BuscarProveedorInput, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(BuscarProductoInput, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
@@ -264,18 +252,11 @@ public class ManageVentaModal extends javax.swing.JDialog {
                                         .addComponent(AgregarProductoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(43, 43, 43)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(IGVInput, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(subTotalInput, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(TotalInput, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(crearVentaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addComponent(TotalInput, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(crearVentaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -287,8 +268,8 @@ public class ManageVentaModal extends javax.swing.JDialog {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ClientesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BuscarClienteInput, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(ProveedoresComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BuscarProveedorInput, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
@@ -302,20 +283,12 @@ public class ManageVentaModal extends javax.swing.JDialog {
                             .addComponent(AgregarProductoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(subTotalInput, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(IGVInput, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(TotalInput, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
                     .addComponent(crearVentaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         pack();
@@ -387,36 +360,31 @@ public class ManageVentaModal extends javax.swing.JDialog {
         for (Vector fila : filas) {
             VentaProducto ventaProducto = (VentaProducto) fila.firstElement();
             total += ventaProducto.getTotal();
-            subTotal += ventaProducto.getSubTotal();
         }
         
-        IGV = total - subTotal;
-        
         TotalInput.setText(String.valueOf(total));
-        subTotalInput.setText(String.valueOf(subTotal));
-        IGVInput.setText(String.valueOf(IGV));
     }
     
     private void crearVentaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearVentaButtonActionPerformed
-        if(idVenta == null)
+        if(idCompra == null)
             crearNuevaVenta();
         else
             editarVenta();
     }//GEN-LAST:event_crearVentaButtonActionPerformed
 
-    private void BuscarClienteInputKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BuscarClienteInputKeyTyped
-        String nombreCliente = BuscarClienteInput.getValue();
-        List <Cliente> clientesFiltrados = clientes.stream()
+    private void BuscarProveedorInputKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BuscarProveedorInputKeyTyped
+        String nombreCliente = BuscarProveedorInput.getValue();
+        List <Proveedor> clientesFiltrados = proveedores.stream()
                 .filter(cliente -> cliente.toString().toLowerCase().contains(nombreCliente.toLowerCase()))
                 .collect(Collectors.toList());
         
-        ClienteComboBoxModel.removeAllElements();
-        ClienteComboBoxModel.addElement("Seleccionar Cliente");
-        clientesFiltrados.forEach(cliente -> ClienteComboBoxModel.addElement(cliente));
+        ProveedorComboBoxModel.removeAllElements();
+        ProveedorComboBoxModel.addElement("Seleccionar Cliente");
+        clientesFiltrados.forEach(cliente -> ProveedorComboBoxModel.addElement(cliente));
         
-        ClientesComboBox.setModel(ClienteComboBoxModel);
-        ClientesComboBox.setPopupVisible(true);
-    }//GEN-LAST:event_BuscarClienteInputKeyTyped
+        ProveedoresComboBox.setModel(ProveedorComboBoxModel);
+        ProveedoresComboBox.setPopupVisible(true);
+    }//GEN-LAST:event_BuscarProveedorInputKeyTyped
 
     private void BuscarProductoInputKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BuscarProductoInputKeyTyped
         String nombreProducto = BuscarProductoInput.getValue();
@@ -434,34 +402,34 @@ public class ManageVentaModal extends javax.swing.JDialog {
 
     private void crearNuevaVenta(){
         Venta venta = new Venta();
-        Cliente cliente;
+        Proveedor cliente;
         
         try {
-            cliente = (Cliente) ClientesComboBox.getSelectedItem();
+            cliente = (Proveedor) ProveedoresComboBox.getSelectedItem();
         } catch (ClassCastException ex) {
             JOptionPane.showMessageDialog(null, "Elija un cliente para crear la venta");
             return;
         }
         
-        if(tablaProductosModel.getRowCount() == 0){
-            JOptionPane.showMessageDialog(null, "Agrege al menos un producto para crear la venta");
-            return;
-        };
-        
-        for(Vector fila : tablaProductosModel.getDataVector()){
-            VentaProducto ventaProducto = (VentaProducto) fila.firstElement();
-            venta.ventasProducto.add(ventaProducto);
-        };
-        
-        venta.setCliente(cliente);
-        
-        if(VentaControlador.crearVenta(venta)){
-            JOptionPane.showMessageDialog(null, "Registro guardado");
-            VentaPage.recagarTabla();
-            dispose();
-        } else {
-            JOptionPane.showMessageDialog(null, "Error al guardar");
-        }
+//        if(tablaProductosModel.getRowCount() == 0){
+//            JOptionPane.showMessageDialog(null, "Agrege al menos un producto para crear la venta");
+//            return;
+//        };
+//        
+//        for(Vector fila : tablaProductosModel.getDataVector()){
+//            VentaProducto ventaProducto = (VentaProducto) fila.firstElement();
+//            venta.ventasProducto.add(ventaProducto);
+//        };
+//        
+//        venta.setCliente(cliente);
+//        
+//        if(VentaControlador.crearVenta(venta)){
+//            JOptionPane.showMessageDialog(null, "Registro guardado");
+//            VentaPage.recagarTabla();
+//            dispose();
+//        } else {
+//            JOptionPane.showMessageDialog(null, "Error al guardar");
+//        }
     }
     
     private void editarVenta(){
@@ -476,7 +444,7 @@ public class ManageVentaModal extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ManageVentaModal dialog = new ManageVentaModal(new javax.swing.JFrame(), true);
+                ManageCompraModal dialog = new ManageCompraModal(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -490,23 +458,19 @@ public class ManageVentaModal extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private components.jButton AgregarProductoButton;
-    private components.jInput BuscarClienteInput;
     private components.jInput BuscarProductoInput;
-    private javax.swing.JComboBox<String> ClientesComboBox;
-    private javax.swing.JTextField IGVInput;
+    private components.jInput BuscarProveedorInput;
     private javax.swing.JComboBox<String> ProductosComboBox;
+    private javax.swing.JComboBox<String> ProveedoresComboBox;
     private javax.swing.JTable TablaProductos;
     private javax.swing.JTextField TotalInput;
     private components.jInput cantidadInput;
     private components.jButton crearVentaButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField subTotalInput;
     // End of variables declaration//GEN-END:variables
 }

@@ -109,7 +109,7 @@ public class VentaControlador {
     }
    
     static public Venta obtenerVenta(String idVenta){
-        String sql = "SELECT * FROM Venta WHERE id='" + idVenta + "'";
+        String sql = "SELECT *, (SELECT nombre FROM Usuario WHERE Usuario.id = Venta.idUsuario) as UsuarioNombre FROM Venta WHERE id='" + idVenta + "'";
         Venta venta = null;
         try {
             Statement st = Conexion.db.createStatement();
@@ -117,6 +117,7 @@ public class VentaControlador {
             while(rs.next()){
                 int id = rs.getInt("id");
                 String idUsuario = rs.getString("idUsuario");
+                String nombreUsuario = rs.getString("UsuarioNombre");
                 int idCliente = rs.getInt("idCliente");
                 double ganancia = rs.getDouble("ganancia");
                 
@@ -126,7 +127,8 @@ public class VentaControlador {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 LocalDateTime fecha = LocalDateTime.parse(fechaSinFormatear.substring(0, lastIndex), formatter);
                 venta = new Venta(id, idCliente, idUsuario, ganancia, fecha);
-                
+                venta.setUsuario(new Usuario());
+                venta.getUsuario().setNombre(nombreUsuario);
                 rs = st.executeQuery("SELECT *, (SELECT nombre FROM Producto WHERE Producto.id = idProducto) as ProductoNombre FROM Venta_Producto WHERE idVenta='" + idVenta +"'");
                 while(rs.next()){
                     int idProducto = rs.getInt("idProducto");
