@@ -22,6 +22,7 @@ import java.awt.event.ActionListener;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Vector;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JPanel;
 import javax.swing.JButton;
@@ -29,6 +30,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 import modelo.Rol;
+import modelo.VentaProducto;
 import vista.dashboard.CategoriaPage;
 import vista.dashboard.ClientePage;
 import vista.dashboard.ProductoPage;
@@ -137,6 +139,8 @@ public class ManageButtonEditorRenderer extends AbstractCellEditor implements Ta
                 else dialog = new ManageVentaModal(parent, true, id);
                 dialog.setLocationRelativeTo(null);
                 dialog.setVisible(true);
+            }
+            case "ProductoDetalleVenta" -> {
                 
             }
         }
@@ -252,7 +256,6 @@ public class ManageButtonEditorRenderer extends AbstractCellEditor implements Ta
                     }
                 }
             }
-            
         }
     }
 

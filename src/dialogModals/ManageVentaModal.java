@@ -4,6 +4,8 @@
  */
 package dialogModals;
 
+import components.ManageButtonCellRenderer;
+import components.ManageButtonEditorRenderer;
 import controlador.ClienteControlador;
 import controlador.ProductoControlador;
 import controlador.ProveedorControlador;
@@ -20,6 +22,7 @@ import modelo.Venta;
 import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import modelo.VentaProducto;
 import vista.dashboard.VentaPage;
 
@@ -73,7 +76,7 @@ public class ManageVentaModal extends javax.swing.JDialog {
     }
     
    
-    private DefaultTableModel tablaProductosModel = new DefaultTableModel(new Object[]{"Nombre","Cantidad","PrecioUnitario","SubTotal","Total", ""}, 0);
+    private DefaultTableModel tablaProductosModel = new DefaultTableModel(new Object[]{"Nombre","Cantidad","PrecioUnitario","SubTotal","Total"}, 0);;
     private DefaultComboBoxModel ClienteComboBoxModel = new DefaultComboBoxModel();
     private DefaultComboBoxModel ProductoComboBoxModel = new DefaultComboBoxModel();
     
@@ -180,6 +183,7 @@ public class ManageVentaModal extends javax.swing.JDialog {
         jLabel6 = new javax.swing.JLabel();
         TotalInput = new javax.swing.JTextField();
         crearVentaButton = new components.jButton();
+        deleteProduct = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -238,6 +242,16 @@ public class ManageVentaModal extends javax.swing.JDialog {
             }
         });
 
+        deleteProduct.setBackground(new java.awt.Color(255, 51, 51));
+        deleteProduct.setForeground(new java.awt.Color(255, 255, 255));
+        deleteProduct.setText("X");
+        deleteProduct.setEnabled(false);
+        deleteProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteProductActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -273,12 +287,18 @@ public class ManageVentaModal extends javax.swing.JDialog {
                             .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(43, 43, 43)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(IGVInput, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(subTotalInput, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(IGVInput, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(TotalInput, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(crearVentaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(crearVentaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(subTotalInput, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(deleteProduct)
+                                .addGap(8, 8, 8)))))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -305,10 +325,11 @@ public class ManageVentaModal extends javax.swing.JDialog {
                             .addComponent(AgregarProductoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(subTotalInput, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(subTotalInput, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(deleteProduct))
                 .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -318,7 +339,7 @@ public class ManageVentaModal extends javax.swing.JDialog {
                     .addComponent(TotalInput, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
                     .addComponent(crearVentaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
 
         pack();
@@ -340,7 +361,7 @@ public class ManageVentaModal extends javax.swing.JDialog {
                 productoAgregadoAnteriormente = true;
                 break;
             }
-        };
+        }
         
         if(productoAgregadoAnteriormente){
             JOptionPane.showMessageDialog(null, "El producto ya ha sido agregado con anterioridad");
@@ -367,10 +388,6 @@ public class ManageVentaModal extends javax.swing.JDialog {
         ventaProducto.setProducto(producto);
         ventaProducto.setPrecioUnitario(producto.getPrecio());
         ventaProducto.setCantidad(cantidadSolicitada);
-        Map<String, Object> manageModelProps = new HashMap();
-        manageModelProps.put("model", "ProductoDetalleVenta");
-        manageModelProps.put("idModel", producto.getId());
-        
         tablaProductosModel.addRow(
             
             new Object[]{
@@ -378,11 +395,10 @@ public class ManageVentaModal extends javax.swing.JDialog {
                 ventaProducto.getCantidad(),
                 ventaProducto.getPrecioUnitario(),
                 ventaProducto.getSubTotal(),
-                ventaProducto.calcularTotal(),
-                manageModelProps
+                ventaProducto.calcularTotal()
             }
         );
-        
+        deleteProduct.setEnabled(true);
         cargarDatosFinales();
     }//GEN-LAST:event_AgregarProductoButtonActionPerformed
 
@@ -439,6 +455,11 @@ public class ManageVentaModal extends javax.swing.JDialog {
         ProductosComboBox.setModel(ProductoComboBoxModel);
         ProductosComboBox.setPopupVisible(true);
     }//GEN-LAST:event_BuscarProductoInputKeyTyped
+
+    private void deleteProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteProductActionPerformed
+        tablaProductosModel.removeRow(TablaProductos.getSelectedRow());
+        if(tablaProductosModel.getRowCount() == 0) deleteProduct.setEnabled(false);
+    }//GEN-LAST:event_deleteProductActionPerformed
 
     private void crearNuevaVenta(){
         Venta venta = new Venta();
@@ -507,6 +528,7 @@ public class ManageVentaModal extends javax.swing.JDialog {
     private javax.swing.JTextField TotalInput;
     private components.jInput cantidadInput;
     private components.jButton crearVentaButton;
+    private javax.swing.JButton deleteProduct;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

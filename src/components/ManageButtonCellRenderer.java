@@ -31,8 +31,8 @@ public class ManageButtonCellRenderer extends DefaultTableCellRenderer {
     
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {      
-        JPanel panel = new JPanel();
         
+        JPanel panel = new JPanel();
         Map<String, Object> props = (Map<String, Object>) value;
         String model = (String) props.get("model");
         Boolean isVentaModel = model.equals("Venta");
