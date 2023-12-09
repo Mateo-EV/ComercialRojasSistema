@@ -84,7 +84,7 @@
                   <Component id="ProveedorMenu" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jMenuItem7" max="32767" attributes="0"/>
+                      <Component id="CerrarSessionButton" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
                   <Component id="VentaMenu" alignment="0" max="32767" attributes="0"/>
@@ -113,7 +113,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="CompraMenu" min="-2" pref="52" max="-2" attributes="0"/>
                       <EmptySpace pref="78" max="32767" attributes="0"/>
-                      <Component id="jMenuItem7" min="-2" pref="52" max="-2" attributes="0"/>
+                      <Component id="CerrarSessionButton" min="-2" pref="52" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -178,10 +178,13 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="VentaMenuActionPerformed"/>
               </Events>
             </Component>
-            <Component class="components.jMenuItem" name="jMenuItem7">
+            <Component class="components.jMenuItem" name="CerrarSessionButton">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Cerrar Sesi&#xf3;n"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CerrarSessionButtonActionPerformed"/>
+              </Events>
             </Component>
             <Component class="components.jMenuItem" name="ProveedorMenu">
               <Properties>

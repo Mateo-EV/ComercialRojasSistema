@@ -24,7 +24,7 @@ public class UsuarioControlador {
     // Método estático para verificar las credenciales de un usuario en la base de datos
     static public boolean login(Usuario usuario) {
         boolean respuesta = false; // Inicializa la variable de respuesta como falso
-        String sql = "SELECT id, nombre, idRol FROM Usuario WHERE id='"+ usuario.getId() +"' AND PASSWORD = '"+ usuario.getPassword() +"'"; // Consulta SQL para verificar las credenciales
+        String sql = "SELECT id, nombre, idRol FROM Usuario WHERE id='"+ usuario.getId() +"' AND PASSWORD = '"+ usuario.getPassword() +"' AND ESTADO=1"; // Consulta SQL para verificar las credenciales
         
         try {
             // Ejecuta la consulta SQL y obtiene el conjunto de resultados

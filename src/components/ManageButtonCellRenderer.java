@@ -36,16 +36,17 @@ public class ManageButtonCellRenderer extends DefaultTableCellRenderer {
         Map<String, Object> props = (Map<String, Object>) value;
         String model = (String) props.get("model");
         Boolean isVentaModel = model.equals("Venta");
+        Boolean isCompraModel = model.equals("Compra");
         Boolean passed15Minutes = false;
-        if(isVentaModel){
+        if(isVentaModel || isCompraModel){
             LocalDateTime fecha = (LocalDateTime) props.get("fecha");
             Duration duration = Duration.between(fecha, LocalDateTime.now());
             passed15Minutes = duration.toMinutes() > 15;
         }
         
         int rolUsuario = Conexion.session.getIdRol();
-        Boolean isAllowedToEdit = ((rolUsuario == Rol.ADMINISTRADOR && (!isVentaModel || !passed15Minutes)) || (rolUsuario == Rol.CAJERO && isVentaModel && !passed15Minutes));
-        Boolean isAllowedToDelete = ((rolUsuario == Rol.ADMINISTRADOR && (!isVentaModel || !passed15Minutes)) || (rolUsuario == Rol.CAJERO && isVentaModel && !passed15Minutes));
+        Boolean isAllowedToEdit = ((rolUsuario == Rol.ADMINISTRADOR && ((!isVentaModel && !isCompraModel) || !passed15Minutes)) || (rolUsuario == Rol.CAJERO && isVentaModel && !passed15Minutes) || (rolUsuario == Rol.COMPRADOR && isCompraModel && !passed15Minutes));
+        Boolean isAllowedToDelete = ((rolUsuario == Rol.ADMINISTRADOR && ((!isVentaModel && !isCompraModel) || !passed15Minutes)) || (rolUsuario == Rol.CAJERO && isVentaModel && !passed15Minutes) || (rolUsuario == Rol.COMPRADOR && isCompraModel && !passed15Minutes));
         if(isAllowedToEdit){
             props.put("view", false);
             EDITAR.setText("Editar");

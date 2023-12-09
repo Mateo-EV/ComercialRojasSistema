@@ -33,7 +33,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 import modelo.Rol;
-import modelo.VentaProducto;
+import modelo.Usuario;
 import vista.dashboard.CategoriaPage;
 import vista.dashboard.ClientePage;
 import vista.dashboard.CompraPage;
@@ -70,8 +70,8 @@ public class ManageButtonEditorRenderer extends AbstractCellEditor implements Ta
         ELIMINAR = new JButton("Eliminar");
         
         int rolUsuario = Conexion.session.getIdRol();
-        Boolean isAllowedToEdit = ((rolUsuario == Rol.ADMINISTRADOR && ((!isVentaModel && !isCompraModel) || !passed15Minutes)) || (rolUsuario == Rol.CAJERO && isVentaModel && !passed15Minutes));
-        Boolean isAllowedToDelete = ((rolUsuario == Rol.ADMINISTRADOR && (!isVentaModel || !passed15Minutes)) || (rolUsuario == Rol.CAJERO && model.equals("Venta")));
+        Boolean isAllowedToEdit = ((rolUsuario == Rol.ADMINISTRADOR && ((!isVentaModel && !isCompraModel) || !passed15Minutes)) || (rolUsuario == Rol.CAJERO && isVentaModel && !passed15Minutes) || (rolUsuario == Rol.COMPRADOR && isCompraModel && !passed15Minutes));
+        Boolean isAllowedToDelete = ((rolUsuario == Rol.ADMINISTRADOR && ((!isVentaModel && !isCompraModel) || !passed15Minutes)) || (rolUsuario == Rol.CAJERO && isVentaModel && !passed15Minutes) || (rolUsuario == Rol.COMPRADOR && isCompraModel && !passed15Minutes));
 
         
         EDITAR.setFont(new java.awt.Font("Segoe UI", 1, 12));
@@ -125,9 +125,15 @@ public class ManageButtonEditorRenderer extends AbstractCellEditor implements Ta
                 dialog.setVisible(true);
             }
             case "Usuario" -> {
-                ManageUsuarioModal dialog = new ManageUsuarioModal(parent, true, id);
-                dialog.setLocationRelativeTo(null);
-                dialog.setVisible(true);
+                Usuario usuario = UsuarioControlador.obtenerUsuario(id);
+                
+                if(usuario.getIdRol() == Rol.ADMINISTRADOR && !Conexion.session.getId().equals(id)){
+                    JOptionPane.showMessageDialog(parent, "No puede editar a otro usuario administrador");
+                } else {
+                    ManageUsuarioModal dialog = new ManageUsuarioModal(parent, true, id);
+                    dialog.setLocationRelativeTo(null);
+                    dialog.setVisible(true);
+                }
             }
             case "Cliente" -> {
                 ManageClienteModal dialog = new ManageClienteModal(parent, true, id);

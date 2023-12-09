@@ -28,7 +28,7 @@ public class Validator {
     }
     
     public static void TELEFONO(String telefono) throws Exception {
-        if(!Pattern.compile("^(\\+34|0034|34)?[ -]*(6|7)[ -]*([0-9][ -]*){8}").matcher(telefono).matches())
+        if(!Pattern.compile("^(\\+([0-9][-]?){1,4})?\\s?([0-9][ -]*){8,9}$").matcher(telefono).matches())
             throw new Exception("Ingrese un teléfono válido");
     }
 }

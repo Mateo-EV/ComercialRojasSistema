@@ -326,6 +326,10 @@ public class ManageUsuarioModal extends javax.swing.JDialog {
                 return;
             }
 
+            Validator.DNI(dni);
+            Validator.EMAIL(email);
+            Validator.TELEFONO(telefono);
+
             usuario.setId(idUsuario);
             usuario.setNombre(nombre);
             usuario.setApellido(apellido);

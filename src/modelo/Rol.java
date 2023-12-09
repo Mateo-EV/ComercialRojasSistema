@@ -11,6 +11,7 @@ package modelo;
 public class Rol {
     static public int ADMINISTRADOR = 1;
     static public int CAJERO = 2;
+    static public int COMPRADOR = 3;
     
     private int id;
     private String nombre;

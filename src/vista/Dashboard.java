@@ -10,6 +10,7 @@ import javax.swing.ImageIcon;
 import java.awt.Image;
 import javax.swing.Icon;
 import java.awt.Component;
+import modelo.Rol;
 import vista.dashboard.CategoriaPage;
 import vista.dashboard.ClientePage;
 import vista.dashboard.CompraPage;
@@ -30,7 +31,6 @@ public class Dashboard extends javax.swing.JFrame {
     
     public Dashboard() {
         initComponents();
-        Conexion.conectar();
         this.setExtendedState(this.MAXIMIZED_BOTH); // Establece el tamaño de la ventana para maximizarla al iniciar
         this.setLocationRelativeTo(null); // Centra la ventana en la pantalla
         
@@ -39,6 +39,18 @@ public class Dashboard extends javax.swing.JFrame {
         setImageLabel(ProductoMenu, "src/recursos/img/categorias.png");
         
         this.setTitle("Comercial Rojas"); // Establece el título de la ventana
+        
+        if(Conexion.session.getIdRol() != Rol.ADMINISTRADOR){
+            UsuarioMenu.setVisible(false);
+        }
+        
+        if(Conexion.session.getIdRol() == Rol.CAJERO){
+            ProveedorMenu.setVisible(false);
+            CompraMenu.setVisible(false);
+        } else if(Conexion.session.getIdRol() == Rol.COMPRADOR){
+            ClienteMenu.setVisible(false);
+            VentaMenu.setVisible(false);
+        }
     }
 
     /**
@@ -59,7 +71,7 @@ public class Dashboard extends javax.swing.JFrame {
         ClienteMenu = new components.jMenuItem();
         CategoriaMenu = new components.jMenuItem();
         VentaMenu = new components.jMenuItem();
-        jMenuItem7 = new components.jMenuItem();
+        CerrarSessionButton = new components.jMenuItem();
         ProveedorMenu = new components.jMenuItem();
         CompraMenu = new components.jMenuItem();
         container = new javax.swing.JPanel();
@@ -116,7 +128,12 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
 
-        jMenuItem7.setText("Cerrar Sesión");
+        CerrarSessionButton.setText("Cerrar Sesión");
+        CerrarSessionButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CerrarSessionButtonActionPerformed(evt);
+            }
+        });
 
         ProveedorMenu.setText("Proveedores");
         ProveedorMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -148,7 +165,7 @@ public class Dashboard extends javax.swing.JFrame {
             .addComponent(ProveedorMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SidebarLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jMenuItem7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(CerrarSessionButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addComponent(VentaMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(CompraMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -175,7 +192,7 @@ public class Dashboard extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(CompraMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 78, Short.MAX_VALUE)
-                .addComponent(jMenuItem7, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(CerrarSessionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(21, 21, 21))
         );
 
@@ -288,6 +305,12 @@ public class Dashboard extends javax.swing.JFrame {
         setPage(new CompraPage(this), "Compras");
     }//GEN-LAST:event_CompraMenuActionPerformed
 
+    private void CerrarSessionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CerrarSessionButtonActionPerformed
+        new Login().setVisible(true);
+        Conexion.session = null;
+        this.dispose();
+    }//GEN-LAST:event_CerrarSessionButtonActionPerformed
+
     // Establece la página de usuarios como la página activa
     private void setImageLabel(javax.swing.JButton label, String root){
         ImageIcon image = new ImageIcon(root); // Crea un objeto ImageIcon a partir de la ruta de la imagen
@@ -310,6 +333,7 @@ public class Dashboard extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private components.jMenuItem CategoriaMenu;
+    private components.jMenuItem CerrarSessionButton;
     private components.jMenuItem ClienteMenu;
     private components.jMenuItem CompraMenu;
     private components.jMenuItem ProductoMenu;
@@ -320,7 +344,6 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JPanel background;
     private javax.swing.JPanel container;
     private javax.swing.JLabel jLabel1;
-    private components.jMenuItem jMenuItem7;
     private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables
 }
