@@ -66,7 +66,7 @@ public class ManageUsuarioModal extends javax.swing.JDialog {
         jButton1.setText("Guardar");
 
         this.idUsuario = id;
-
+        UsuarioPage.recagarTabla();
     }
 
     /**

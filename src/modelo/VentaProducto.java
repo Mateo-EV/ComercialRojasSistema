@@ -86,12 +86,12 @@ public class VentaProducto {
     }
     
     public double getSubTotal(){
-        return cantidad * precioUnitario;
+        return (double) Math.round(cantidad * precioUnitario * 100) / 100;
     }
     
     public double calcularTotal(){
         double subTotal = getSubTotal();
-        this.total = subTotal + subTotal*0.18;
+        this.total = (double) Math.round((subTotal + subTotal*0.18) * 100) / 100;
         
         return this.total;
     }

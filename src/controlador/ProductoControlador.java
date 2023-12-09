@@ -32,7 +32,7 @@ public class ProductoControlador {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 int stock = rs.getInt("stock");
-                double precio = rs.getDouble("stock");
+                double precio = rs.getDouble("precio");
                 String nombre = rs.getString("nombre");
                 String descripcion = rs.getString("descripcion");
                 String marca = rs.getString("marca");
@@ -106,7 +106,7 @@ public class ProductoControlador {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 int stock = rs.getInt("stock");
-                double precio = rs.getDouble("stock");
+                double precio = rs.getDouble("precio");
                 String nombre = rs.getString("nombre");
                 String descripcion = rs.getString("descripcion");
                 String marca = rs.getString("marca");

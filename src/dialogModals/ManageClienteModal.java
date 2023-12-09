@@ -48,7 +48,7 @@ public class ManageClienteModal extends javax.swing.JDialog {
         jButton1.setText("Guardar");
 
         this.idCliente = id;
-
+        ClientePage.recagarTabla();
     }
 
     /**

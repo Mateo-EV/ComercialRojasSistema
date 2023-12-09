@@ -46,9 +46,9 @@ public class ManageButtonCellRenderer extends DefaultTableCellRenderer {
         int rolUsuario = Conexion.session.getIdRol();
         Boolean isAllowedToEdit = ((rolUsuario == Rol.ADMINISTRADOR && (!isVentaModel || !passed15Minutes)) || (rolUsuario == Rol.CAJERO && isVentaModel && !passed15Minutes));
         Boolean isAllowedToDelete = ((rolUsuario == Rol.ADMINISTRADOR && (!isVentaModel || !passed15Minutes)) || (rolUsuario == Rol.CAJERO && isVentaModel && !passed15Minutes));
-        
         if(isAllowedToEdit){
             props.put("view", false);
+            EDITAR.setText("Editar");
             EDITAR.setBackground(new Color(255, 200, 0));
         } else {
             props.put("view", true);

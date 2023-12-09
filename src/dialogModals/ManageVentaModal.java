@@ -110,7 +110,9 @@ public class ManageVentaModal extends javax.swing.JDialog {
         cargarDatosFinales();
         
         this.idVenta = id;
+        deleteProduct.setEnabled(true);
         
+        VentaPage.recagarTabla();
     }
     
     public ManageVentaModal(java.awt.Frame parent, boolean modal, String id, boolean view) {
@@ -150,8 +152,11 @@ public class ManageVentaModal extends javax.swing.JDialog {
         BuscarProductoInput.setEnabled(false);
           
         cantidadInput.setEnabled(false);
+        this.remove(deleteProduct);
         
         this.idVenta = id;
+        
+        VentaPage.recagarTabla();
         
     }
 
@@ -414,7 +419,7 @@ public class ManageVentaModal extends javax.swing.JDialog {
             subTotal += ventaProducto.getSubTotal();
         }
         
-        IGV = total - subTotal;
+        IGV = (double) Math.round((total - subTotal)*100) / 100;
         
         TotalInput.setText(String.valueOf(total));
         subTotalInput.setText(String.valueOf(subTotal));
@@ -494,7 +499,36 @@ public class ManageVentaModal extends javax.swing.JDialog {
     }
     
     private void editarVenta(){
+        Venta venta = new Venta();
+        venta.setId(Integer.parseInt(idVenta));
+        Cliente cliente;
         
+        try {
+            cliente = (Cliente) ClientesComboBox.getSelectedItem();
+        } catch (ClassCastException ex) {
+            JOptionPane.showMessageDialog(null, "Elija un cliente para crear la venta");
+            return;
+        }
+        
+        if(tablaProductosModel.getRowCount() == 0){
+            JOptionPane.showMessageDialog(null, "Agrege al menos un producto para crear la venta");
+            return;
+        };
+        
+        for(Vector fila : tablaProductosModel.getDataVector()){
+            VentaProducto ventaProducto = (VentaProducto) fila.firstElement();
+            venta.ventasProducto.add(ventaProducto);
+        };
+        
+        venta.setCliente(cliente);
+        
+        if(VentaControlador.actualizarVenta(venta)){
+            JOptionPane.showMessageDialog(null, "Registro guardado");
+            VentaPage.recagarTabla();
+            dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al guardar");
+        }
     }
     
     /**

@@ -50,7 +50,7 @@ public class ManageProductoModal extends javax.swing.JDialog {
         precioInput.setValue(String.valueOf(producto.getPrecio()));
         
         jButton1.setText("Guardar");
-        
+        ProductoPage.recagarTabla();
     }
 
     private void cargarCategoriasEnCombobox() {

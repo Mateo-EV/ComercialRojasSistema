@@ -41,6 +41,7 @@ public class ManageCategoriaModal extends javax.swing.JDialog {
         jButton1.setText("Guardar");
         
         this.idCategoria = id;
+        CategoriaPage.recagarTabla();
         
     }
 

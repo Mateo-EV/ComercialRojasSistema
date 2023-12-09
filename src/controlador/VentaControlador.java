@@ -86,7 +86,7 @@ public class VentaControlador {
                         pst.setDouble(5, ventaProducto.getTotal());
 
                         if(pst.executeUpdate() > 0){
-                            pst = Conexion.db.prepareStatement("UPDATE Producto SET Stock = Stock - ? WHERE id = ?");
+                            pst = Conexion.db.prepareStatement("UPDATE Producto SET stock = stock - ? WHERE id = ?");
                             pst.setInt(1, ventaProducto.getCantidad());
                             pst.setInt(2, ventaProducto.getProducto().getId());
 
@@ -100,6 +100,78 @@ public class VentaControlador {
                     }
                 } 
             };
+            
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        
+        return respuesta;
+    }
+    
+    static public boolean actualizarVenta(Venta venta){
+        boolean respuesta = false;
+        venta.setUsuario(Conexion.session);
+        venta.calcularGanancia();
+        try {
+            Statement st = Conexion.db.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM Venta_Producto WHERE idVenta='"+ venta.getId() +"'");
+            while(rs.next()){
+                PreparedStatement pst = Conexion.db.prepareStatement("UPDATE Producto SET stock = stock + ? WHERE id = '"+ rs.getInt("idProducto") +"'");
+                pst.setInt(1, rs.getInt("cantidad"));
+                pst.execute();
+            }
+            
+            PreparedStatement pst = Conexion.db.prepareStatement("DELETE FROM Venta_Producto WHERE idVenta='"+ venta.getId() +"'");
+            if(pst.executeUpdate() > 0){
+                pst = Conexion.db.prepareStatement("UPDATE Venta SET idCliente=?, idUsuario=?, ganancia=?, fecha=GETDATE() WHERE id='" + venta.getId() +"'");
+                pst.setInt(1, venta.getCliente().getId());
+                pst.setString(2, venta.getUsuario().getId());
+                pst.setDouble(3, venta.getGanancia());
+                
+                if(pst.executeUpdate() > 0){
+                    for (VentaProducto ventaProducto : venta.getVentasProducto()) {
+                        pst = Conexion.db.prepareStatement("INSERT INTO Venta_Producto VALUES (?, ?, ?, ?, ?)");
+                        pst.setInt(1, venta.getId());
+                        pst.setInt(2, ventaProducto.getProducto().getId());
+                        pst.setInt(3, ventaProducto.getCantidad());
+                        pst.setDouble(4, ventaProducto.getPrecioUnitario());
+                        pst.setDouble(5, ventaProducto.getTotal());
+                        
+                        if(pst.executeUpdate() > 0){
+                            pst = Conexion.db.prepareStatement("UPDATE Producto SET stock = stock - ? WHERE id = ?");
+                            pst.setInt(1, ventaProducto.getCantidad());
+                            pst.setInt(2, ventaProducto.getProducto().getId());
+                            
+                            if(pst.executeUpdate() > 0) respuesta = true;
+                        }
+                    }
+                }
+            };
+            
+        } catch (SQLException e){
+            System.out.println("Error: " + e.getMessage());
+        }
+        return respuesta;
+    }
+    
+    static public boolean eliminarVenta(String idVenta){
+        boolean respuesta = false;
+        try {
+            Statement st = Conexion.db.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM Venta_Producto WHERE idVenta='"+ idVenta +"'");
+            while(rs.next()){
+                PreparedStatement pst = Conexion.db.prepareStatement("UPDATE Producto SET stock = stock + ? WHERE id = '"+ rs.getInt("idProducto") +"'");
+                pst.setInt(1, rs.getInt("cantidad"));
+                pst.execute();
+            }
+            
+             PreparedStatement pst = Conexion.db.prepareStatement("DELETE FROM Venta_Producto WHERE idVenta='"+ idVenta +"'");
+             if(pst.executeUpdate() > 0){
+                 pst = Conexion.db.prepareStatement("DELETE FROM Venta WHERE id='"+ idVenta +"'");
+                 if(pst.executeUpdate() > 0){
+                     respuesta = true;
+                 }
+             }
             
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
@@ -140,6 +212,7 @@ public class VentaControlador {
                     VentaProducto ventaProducto = new VentaProducto(id, idProducto, cantidad, precioUnitario, total);
                     ventaProducto.setProducto(new Producto());
                     ventaProducto.getProducto().setNombre(productoNombre);
+                    ventaProducto.getProducto().setId(idProducto);
                     venta.ventasProducto.add(ventaProducto);
                 }
                 

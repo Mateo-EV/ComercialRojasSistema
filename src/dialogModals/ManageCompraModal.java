@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.VentaProducto;
+import vista.dashboard.CompraPage;
 import vista.dashboard.VentaPage;
 
 /**
@@ -105,7 +106,7 @@ public class ManageCompraModal extends javax.swing.JDialog {
         cargarDatosFinales();
         
         this.idCompra = id;
-        
+        CompraPage.recagarTabla();
     }
     
     public ManageCompraModal(java.awt.Frame parent, boolean modal, String id, boolean view) {

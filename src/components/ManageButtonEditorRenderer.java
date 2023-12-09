@@ -10,6 +10,7 @@ import controlador.ClienteControlador;
 import controlador.ProductoControlador;
 import controlador.ProveedorControlador;
 import controlador.UsuarioControlador;
+import controlador.VentaControlador;
 import dialogModals.ManageCategoriaModal;
 import dialogModals.ManageClienteModal;
 import dialogModals.ManageProductoModal;
@@ -36,6 +37,7 @@ import vista.dashboard.ClientePage;
 import vista.dashboard.ProductoPage;
 import vista.dashboard.ProveedorPage;
 import vista.dashboard.UsuarioPage;
+import vista.dashboard.VentaPage;
 
 /**
  *
@@ -169,6 +171,23 @@ public class ManageButtonEditorRenderer extends AbstractCellEditor implements Ta
                             CategoriaPage.recagarTabla();
                         }
                         default -> JOptionPane.showMessageDialog(parent, "Ocurrió un error al eliminar la categoría");
+                    }
+                }
+            }
+            case "Venta" -> {
+                int respuesta = JOptionPane.showConfirmDialog(
+                        parent,
+                        "¿Estás seguro que desea eliminar la venta?",
+                        "Advertencia",
+                        JOptionPane.OK_CANCEL_OPTION
+                );
+                
+                if(respuesta == 0){
+                    if(VentaControlador.eliminarVenta(id)){
+                        JOptionPane.showMessageDialog(parent, "Registro elminado con éxito");
+                        VentaPage.recagarTabla();
+                    } else {
+                        JOptionPane.showMessageDialog(parent, "Ocurrió un error al eliminar la venta");
                     }
                 }
             }

@@ -42,7 +42,7 @@ public class ManageProveedorModal extends javax.swing.JDialog {
         jButton1.setText("Guardar");
         
         this.idProveedor = id;
-        
+        ProveedorPage.recagarTabla();
     }
 
     /**
