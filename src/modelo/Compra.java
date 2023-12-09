@@ -1,6 +1,8 @@
 package modelo;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /*
@@ -18,14 +20,18 @@ public class Compra {
     private int idProveedor;
     private Proveedor proveedor;
     
-    private int idUsuario;
+    private String idUsuario;
     private Usuario usuario;
     
     private double pago;
     
     private LocalDateTime fecha;
+    
+    public List<CompraProducto> comprasProducto = new ArrayList();
+    
+    public Compra(){};
 
-    public Compra(int id, int idProveedor, int idUsuario, double pago, LocalDateTime fecha) {
+    public Compra(int id, int idProveedor, String idUsuario, double pago, LocalDateTime fecha) {
         this.id = id;
         this.idProveedor = idProveedor;
         this.idUsuario = idUsuario;
@@ -40,8 +46,6 @@ public class Compra {
         this.pago = pago;
         this.fecha = fecha;
     }
-    
-    
 
     public int getId() {
         return id;
@@ -67,11 +71,11 @@ public class Compra {
         this.proveedor = proveedor;
     }
 
-    public int getIdUsuario() {
+    public String getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(int idUsuario) {
+    public void setIdUsuario(String idUsuario) {
         this.idUsuario = idUsuario;
     }
 
@@ -98,6 +102,21 @@ public class Compra {
     public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
+
+    public List<CompraProducto> getComprasProducto() {
+        return comprasProducto;
+    }
+
+    public void setComprasProducto(List<CompraProducto> comprasProducto) {
+        this.comprasProducto = comprasProducto;
+    }
     
-    
+    public void calcularPago(){
+        double pago = 0;
+        for (CompraProducto compraProducto : comprasProducto) {
+            pago += compraProducto.getPrecioUnitario() * compraProducto.getCantidad();
+        }
+        
+        this.pago = pago;
+    }
 }

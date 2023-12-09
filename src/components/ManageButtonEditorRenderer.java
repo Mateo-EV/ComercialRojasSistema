@@ -7,12 +7,14 @@ package components;
 import conexion.Conexion;
 import controlador.CategoriaControlador;
 import controlador.ClienteControlador;
+import controlador.CompraControlador;
 import controlador.ProductoControlador;
 import controlador.ProveedorControlador;
 import controlador.UsuarioControlador;
 import controlador.VentaControlador;
 import dialogModals.ManageCategoriaModal;
 import dialogModals.ManageClienteModal;
+import dialogModals.ManageCompraModal;
 import dialogModals.ManageProductoModal;
 import dialogModals.ManageProveedorModal;
 import dialogModals.ManageUsuarioModal;
@@ -34,6 +36,7 @@ import modelo.Rol;
 import modelo.VentaProducto;
 import vista.dashboard.CategoriaPage;
 import vista.dashboard.ClientePage;
+import vista.dashboard.CompraPage;
 import vista.dashboard.ProductoPage;
 import vista.dashboard.ProveedorPage;
 import vista.dashboard.UsuarioPage;
@@ -55,8 +58,9 @@ public class ManageButtonEditorRenderer extends AbstractCellEditor implements Ta
         Map<String, Object> props = (Map<String, Object>) value;
         String model = (String) props.get("model");
         Boolean isVentaModel = model.equals("Venta");
+        Boolean isCompraModel = model.equals("Compra");
         Boolean passed15Minutes = false;
-        if(isVentaModel){
+        if(isVentaModel || isCompraModel){
             LocalDateTime fecha = (LocalDateTime) props.get("fecha");
             Duration duration = Duration.between(fecha, LocalDateTime.now());
             passed15Minutes = duration.toMinutes() > 15;
@@ -66,7 +70,7 @@ public class ManageButtonEditorRenderer extends AbstractCellEditor implements Ta
         ELIMINAR = new JButton("Eliminar");
         
         int rolUsuario = Conexion.session.getIdRol();
-        Boolean isAllowedToEdit = ((rolUsuario == Rol.ADMINISTRADOR && (!isVentaModel || !passed15Minutes)) || (rolUsuario == Rol.CAJERO && isVentaModel && !passed15Minutes));
+        Boolean isAllowedToEdit = ((rolUsuario == Rol.ADMINISTRADOR && ((!isVentaModel && !isCompraModel) || !passed15Minutes)) || (rolUsuario == Rol.CAJERO && isVentaModel && !passed15Minutes));
         Boolean isAllowedToDelete = ((rolUsuario == Rol.ADMINISTRADOR && (!isVentaModel || !passed15Minutes)) || (rolUsuario == Rol.CAJERO && model.equals("Venta")));
 
         
@@ -142,8 +146,12 @@ public class ManageButtonEditorRenderer extends AbstractCellEditor implements Ta
                 dialog.setLocationRelativeTo(null);
                 dialog.setVisible(true);
             }
-            case "ProductoDetalleVenta" -> {
-                
+            case "Compra" -> {
+                ManageCompraModal dialog = null;
+                if((Boolean) props.get("view")) dialog = new ManageCompraModal(parent, true, id, true);
+                else dialog = new ManageCompraModal(parent, true, id);
+                dialog.setLocationRelativeTo(null);
+                dialog.setVisible(true);
             }
         }
     }
@@ -188,6 +196,23 @@ public class ManageButtonEditorRenderer extends AbstractCellEditor implements Ta
                         VentaPage.recagarTabla();
                     } else {
                         JOptionPane.showMessageDialog(parent, "Ocurrió un error al eliminar la venta");
+                    }
+                }
+            }
+            case "Compra" -> {
+                int respuesta = JOptionPane.showConfirmDialog(
+                        parent,
+                        "¿Estás seguro que desea eliminar la compra?",
+                        "Advertencia",
+                        JOptionPane.OK_CANCEL_OPTION
+                );
+                
+                if(respuesta == 0){
+                    if(CompraControlador.eliminarCompra(id)){
+                        JOptionPane.showMessageDialog(parent, "Registro elminado con éxito");
+                        CompraPage.recagarTabla();
+                    } else {
+                        JOptionPane.showMessageDialog(parent, "Ocurrió un error al eliminar la compra");
                     }
                 }
             }

@@ -5,19 +5,23 @@
 package dialogModals;
 
 import controlador.ClienteControlador;
+import controlador.CompraControlador;
 import controlador.ProductoControlador;
 import controlador.ProveedorControlador;
 import controlador.VentaControlador;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import modelo.Proveedor;
 import modelo.Producto;
-import modelo.Venta;
+import modelo.Compra;
 
 import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import modelo.CompraProducto;
 import modelo.VentaProducto;
 import vista.dashboard.CompraPage;
 import vista.dashboard.VentaPage;
@@ -72,7 +76,7 @@ public class ManageCompraModal extends javax.swing.JDialog {
     }
     
    
-    private DefaultTableModel tablaProductosModel = new DefaultTableModel(new Object[]{"Nombre","Cantidad","PrecioUnitario","SubTotal","Total"}, 0);
+    private DefaultTableModel tablaProductosModel = new DefaultTableModel(new Object[]{"Nombre","Cantidad","PrecioUnitario","Total"}, 0);
     private DefaultComboBoxModel ProveedorComboBoxModel = new DefaultComboBoxModel();
     private DefaultComboBoxModel ProductoComboBoxModel = new DefaultComboBoxModel();
     
@@ -83,51 +87,49 @@ public class ManageCompraModal extends javax.swing.JDialog {
     public ManageCompraModal(java.awt.Frame parent, boolean modal, String id) {
         super(parent, modal);
         
-        Venta venta = VentaControlador.obtenerVenta(id);
+        Compra compra = CompraControlador.obtenerCompra(id);
         initComponents();
         
         jLabel1.setText("Editar Compra");
-        this.idProveedor = venta.getIdCliente();
+        this.idProveedor = compra.getIdProveedor();
         
         crearVentaButton.setText("Guardar");
         cargarProveedores();
         cargarProductos();
         
-        venta.getVentasProducto().forEach((ventaProducto) -> {
+        compra.getComprasProducto().forEach((compraProducto) -> {
             tablaProductosModel.addRow(new Object[]{
-                ventaProducto,
-                ventaProducto.getCantidad(),
-                ventaProducto.getPrecioUnitario(),
-                ventaProducto.getSubTotal(),
-                ventaProducto.calcularTotal(),
+                compraProducto,
+                compraProducto.getCantidad(),
+                compraProducto.getPrecioUnitario(),
+                compraProducto.calcularTotal(),
             });
         });
         
         cargarDatosFinales();
         
         this.idCompra = id;
+        deleteProduct.setEnabled(true);
         CompraPage.recagarTabla();
     }
     
     public ManageCompraModal(java.awt.Frame parent, boolean modal, String id, boolean view) {
         super(parent, modal);
         
-        Venta venta = VentaControlador.obtenerVenta(id);
+        Compra compra = CompraControlador.obtenerCompra(id);
         initComponents();
         
         jLabel1.setText("Detalle de la Venta");
-        this.idProveedor = venta.getIdCliente();
+        this.idProveedor = compra.getIdProveedor();
         
         cargarProveedores();
         jLabel5.setText("Usuario");
         
-        
-        venta.getVentasProducto().forEach((ventaProducto) -> {
+        compra.getComprasProducto().forEach((ventaProducto) -> {
             tablaProductosModel.addRow(new Object[]{
                 ventaProducto,
                 ventaProducto.getCantidad(),
                 ventaProducto.getPrecioUnitario(),
-                ventaProducto.getSubTotal(),
                 ventaProducto.calcularTotal(),
             });
         });
@@ -135,7 +137,7 @@ public class ManageCompraModal extends javax.swing.JDialog {
         cargarDatosFinales();
         
         ProveedoresComboBox.setEnabled(false);
-        ProductoComboBoxModel.addElement(venta.getUsuario().getNombre());
+        ProductoComboBoxModel.addElement(compra.getUsuario().getNombre());
         ProductosComboBox.setModel(ProductoComboBoxModel);
         ProductosComboBox.setEnabled(false);
         this.remove(crearVentaButton);
@@ -174,6 +176,9 @@ public class ManageCompraModal extends javax.swing.JDialog {
         jLabel6 = new javax.swing.JLabel();
         TotalInput = new javax.swing.JTextField();
         crearVentaButton = new components.jButton();
+        precioInput = new components.jInput("");
+        jLabel8 = new javax.swing.JLabel();
+        deleteProduct = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -224,6 +229,20 @@ public class ManageCompraModal extends javax.swing.JDialog {
             }
         });
 
+        precioInput.setText("");
+
+        jLabel8.setText("Precio");
+
+        deleteProduct.setBackground(new java.awt.Color(255, 51, 51));
+        deleteProduct.setForeground(new java.awt.Color(255, 255, 255));
+        deleteProduct.setText("X");
+        deleteProduct.setEnabled(false);
+        deleteProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteProductActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -241,17 +260,25 @@ public class ManageCompraModal extends javax.swing.JDialog {
                             .addComponent(ProductosComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(BuscarProveedorInput, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(BuscarProveedorInput, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(BuscarProductoInput, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel7)
+                                    .addComponent(precioInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel8))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(cantidadInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(25, 25, 25)
-                                        .addComponent(AgregarProductoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                                        .addGap(18, 18, 18)
+                                        .addComponent(AgregarProductoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel7)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(deleteProduct))))))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(43, 43, 43)
@@ -265,23 +292,34 @@ public class ManageCompraModal extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ProveedoresComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BuscarProveedorInput, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel7)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ProveedoresComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(BuscarProveedorInput, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel5))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(89, 89, 89)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel8))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(deleteProduct)
+                                .addGap(14, 14, 14)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cantidadInput, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(ProductosComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(BuscarProductoInput, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(AgregarProductoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(AgregarProductoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(precioInput, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(34, 34, 34)
@@ -306,8 +344,8 @@ public class ManageCompraModal extends javax.swing.JDialog {
         
         boolean productoAgregadoAnteriormente = false;
         for(Vector<Object> fila : tablaProductosModel.getDataVector()){
-            VentaProducto ventaProducto = (VentaProducto) fila.firstElement();
-            if(ventaProducto.getProducto().getId() == productoSeleccionado.getId()){
+            CompraProducto compraProducto = (CompraProducto) fila.firstElement();
+            if(compraProducto.getProducto().getId() == productoSeleccionado.getId()){
                 productoAgregadoAnteriormente = true;
                 break;
             }
@@ -320,6 +358,23 @@ public class ManageCompraModal extends javax.swing.JDialog {
         
         Producto producto = ProductoControlador.obtenerProducto(String.valueOf(productoSeleccionado.getId()));
         
+        double precioUnitario;
+        try {
+            precioUnitario = Double.parseDouble(precioInput.getValue());
+            if(precioUnitario <= 0) throw new NumberFormatException();
+            BigDecimal bigDecimal = new BigDecimal(precioUnitario).setScale(2, RoundingMode.HALF_UP);
+            if (bigDecimal.valueOf(precioUnitario).scale() > 2) throw new NumberFormatException();
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "El precio debe ser un número con 2 decimales máximos mayor a 0");
+            return;
+        }
+        
+        if(precioUnitario >= producto.getPrecio()) {
+            JOptionPane.showMessageDialog(null, "El precio de compra es mayor o igual al precio de venta: S/." + producto.getPrecio());
+            return;
+        }
+        
         int cantidadSolicitada;
         try {
             cantidadSolicitada = Integer.parseInt(cantidadInput.getValue());
@@ -329,38 +384,31 @@ public class ManageCompraModal extends javax.swing.JDialog {
             return;
         }
         
-        if(cantidadSolicitada > producto.getStock()) {
-            JOptionPane.showMessageDialog(null, "La cantidad solicitada supera el stock");
-            return;
-        }
-        
-        VentaProducto ventaProducto = new VentaProducto();
-        ventaProducto.setProducto(producto);
-        ventaProducto.setPrecioUnitario(producto.getPrecio());
-        ventaProducto.setCantidad(cantidadSolicitada);
+        CompraProducto compraProducto = new CompraProducto();
+        compraProducto.setProducto(producto);
+        compraProducto.setPrecioUnitario(precioUnitario);
+        compraProducto.setCantidad(cantidadSolicitada);
         
         tablaProductosModel.addRow(
             new Object[]{
-                ventaProducto,
-                ventaProducto.getCantidad(),
-                ventaProducto.getPrecioUnitario(),
-                ventaProducto.getSubTotal(),
-                ventaProducto.calcularTotal(),
+                compraProducto,
+                compraProducto.getCantidad(),
+                compraProducto.getPrecioUnitario(),
+                compraProducto.calcularTotal(),
             }
         );
         
+        deleteProduct.setEnabled(true);
         cargarDatosFinales();
     }//GEN-LAST:event_AgregarProductoButtonActionPerformed
 
     private void cargarDatosFinales(){
         Vector<Vector> filas = tablaProductosModel.getDataVector();
         double total = 0;
-        double subTotal = 0;
-        double IGV = 0;
         
         for (Vector fila : filas) {
-            VentaProducto ventaProducto = (VentaProducto) fila.firstElement();
-            total += ventaProducto.getTotal();
+            CompraProducto compraProducto = (CompraProducto) fila.firstElement();
+            total += compraProducto.calcularTotal();
         }
         
         TotalInput.setText(String.valueOf(total));
@@ -368,9 +416,9 @@ public class ManageCompraModal extends javax.swing.JDialog {
     
     private void crearVentaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearVentaButtonActionPerformed
         if(idCompra == null)
-            crearNuevaVenta();
+            crearNuevaCompra();
         else
-            editarVenta();
+            editarCompra();
     }//GEN-LAST:event_crearVentaButtonActionPerformed
 
     private void BuscarProveedorInputKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BuscarProveedorInputKeyTyped
@@ -380,7 +428,7 @@ public class ManageCompraModal extends javax.swing.JDialog {
                 .collect(Collectors.toList());
         
         ProveedorComboBoxModel.removeAllElements();
-        ProveedorComboBoxModel.addElement("Seleccionar Cliente");
+        ProveedorComboBoxModel.addElement("Seleccionar Proveedor");
         clientesFiltrados.forEach(cliente -> ProveedorComboBoxModel.addElement(cliente));
         
         ProveedoresComboBox.setModel(ProveedorComboBoxModel);
@@ -401,40 +449,74 @@ public class ManageCompraModal extends javax.swing.JDialog {
         ProductosComboBox.setPopupVisible(true);
     }//GEN-LAST:event_BuscarProductoInputKeyTyped
 
-    private void crearNuevaVenta(){
-        Venta venta = new Venta();
-        Proveedor cliente;
+    private void deleteProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteProductActionPerformed
+        tablaProductosModel.removeRow(TablaProductos.getSelectedRow());
+        if(tablaProductosModel.getRowCount() == 0) deleteProduct.setEnabled(false);
+    }//GEN-LAST:event_deleteProductActionPerformed
+
+    private void crearNuevaCompra(){
+        Compra compra = new Compra();
+        Proveedor proveedor;
         
         try {
-            cliente = (Proveedor) ProveedoresComboBox.getSelectedItem();
+            proveedor = (Proveedor) ProveedoresComboBox.getSelectedItem();
         } catch (ClassCastException ex) {
-            JOptionPane.showMessageDialog(null, "Elija un cliente para crear la venta");
+            JOptionPane.showMessageDialog(null, "Elija un proveedor para realizar la compra");
             return;
         }
         
-//        if(tablaProductosModel.getRowCount() == 0){
-//            JOptionPane.showMessageDialog(null, "Agrege al menos un producto para crear la venta");
-//            return;
-//        };
-//        
-//        for(Vector fila : tablaProductosModel.getDataVector()){
-//            VentaProducto ventaProducto = (VentaProducto) fila.firstElement();
-//            venta.ventasProducto.add(ventaProducto);
-//        };
-//        
-//        venta.setCliente(cliente);
-//        
-//        if(VentaControlador.crearVenta(venta)){
-//            JOptionPane.showMessageDialog(null, "Registro guardado");
-//            VentaPage.recagarTabla();
-//            dispose();
-//        } else {
-//            JOptionPane.showMessageDialog(null, "Error al guardar");
-//        }
+        if(tablaProductosModel.getRowCount() == 0){
+            JOptionPane.showMessageDialog(null, "Agrege al menos un producto para realizar la compra");
+            return;
+        };
+        
+        for(Vector fila : tablaProductosModel.getDataVector()){
+            CompraProducto compraProducto = (CompraProducto) fila.firstElement();
+            compra.comprasProducto.add(compraProducto);
+        };
+        
+        compra.setProveedor(proveedor);
+        
+        if(CompraControlador.crearCompra(compra)){
+            JOptionPane.showMessageDialog(null, "Registro guardado");
+            CompraPage.recagarTabla();
+            dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al guardar");
+        }
     }
     
-    private void editarVenta(){
+    private void editarCompra(){
+        Compra compra = new Compra();
+        compra.setId(Integer.parseInt(idCompra));
+        Proveedor proveedor;
         
+        try {
+            proveedor = (Proveedor) ProveedoresComboBox.getSelectedItem();
+        } catch (ClassCastException ex) {
+            JOptionPane.showMessageDialog(null, "Elija un proveedor para editar la compra");
+            return;
+        }
+        
+        if(tablaProductosModel.getRowCount() == 0){
+            JOptionPane.showMessageDialog(null, "Agrege al menos un producto para editar la compra");
+            return;
+        };
+        
+        for(Vector fila : tablaProductosModel.getDataVector()){
+            CompraProducto compraProducto = (CompraProducto) fila.firstElement();
+            compra.comprasProducto.add(compraProducto);
+        };
+        
+        compra.setProveedor(proveedor);
+        
+        if(CompraControlador.actualizarCompra(compra)){
+            JOptionPane.showMessageDialog(null, "Registro guardado");
+            CompraPage.recagarTabla();
+            dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al guardar");
+        }
     }
     
     /**
@@ -467,11 +549,14 @@ public class ManageCompraModal extends javax.swing.JDialog {
     private javax.swing.JTextField TotalInput;
     private components.jInput cantidadInput;
     private components.jButton crearVentaButton;
+    private javax.swing.JButton deleteProduct;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
+    private components.jInput precioInput;
     // End of variables declaration//GEN-END:variables
 }

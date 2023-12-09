@@ -10,10 +10,15 @@ package modelo;
  */
 public class CompraProducto {
     private int idCompra;
+    private Venta venta;
+    
     private int idProducto;
+    private Producto producto;
     
     private int cantidad;
     private double precioUnitario;
+    
+    public CompraProducto(){};
 
     public CompraProducto(int idCompra, int idProducto, int cantidad, double precioUnitario) {
         this.idCompra = idCompra;
@@ -55,6 +60,27 @@ public class CompraProducto {
     }
     
     public double calcularTotal(){
-        return this.cantidad * this.precioUnitario;
+        return Math.round(this.cantidad * this.precioUnitario * 100) / 100;
+    }
+
+    public Venta getVenta() {
+        return venta;
+    }
+
+    public void setVenta(Venta venta) {
+        this.venta = venta;
+    }
+
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
+
+    @Override
+    public String toString() {
+        return producto.toString();
     }
 }

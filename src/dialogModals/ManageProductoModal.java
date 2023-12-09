@@ -6,6 +6,8 @@ package dialogModals;
 
 import controlador.CategoriaControlador;
 import controlador.ProductoControlador;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import javax.swing.JOptionPane;
 import modelo.Categoria;
 import vista.dashboard.CategoriaPage;
@@ -60,7 +62,6 @@ public class ManageProductoModal extends javax.swing.JDialog {
         for (int i = 0; i < categorias.size(); i++) {
             CategoriaComboBoxModel.addElement(categorias.get(i));
             if(this.idCategoria == categorias.get(i).getId()){
-                System.out.println(idCategoria + "  ->  "+categorias.get(i).getId());
                 indexSelected = i+1; 
             }
         }
@@ -280,15 +281,19 @@ public class ManageProductoModal extends javax.swing.JDialog {
 
         try {
             precio = Double.parseDouble(precioInput.getValue());
+            if(precio <= 0) throw new NumberFormatException();
+            BigDecimal bigDecimal = new BigDecimal(precio).setScale(2, RoundingMode.HALF_UP);
+            if (bigDecimal.valueOf(precio).scale() > 2) throw new NumberFormatException();
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(null, "El campo precio debe ser un número");
+            JOptionPane.showMessageDialog(null, "El campo precio debe ser un número con dos decimales máximos mayor a 0");
             return;
         }
         
         try {
             stock = Integer.parseInt(stockInput.getValue());
+            if(stock < 0) throw new NumberFormatException();
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(null, "El campo stock debe ser un número entero");
+            JOptionPane.showMessageDialog(null, "El campo stock debe ser un número entero mayor o igual a 0");
             return;
         }
         

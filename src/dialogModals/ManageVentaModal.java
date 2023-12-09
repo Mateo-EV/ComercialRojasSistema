@@ -385,7 +385,7 @@ public class ManageVentaModal extends javax.swing.JDialog {
         }
         
         if(cantidadSolicitada > producto.getStock()) {
-            JOptionPane.showMessageDialog(null, "La cantidad solicitada supera el stock");
+            JOptionPane.showMessageDialog(null, "La cantidad solicitada supera el stock: " + producto.getStock());
             return;
         }
         
@@ -473,12 +473,12 @@ public class ManageVentaModal extends javax.swing.JDialog {
         try {
             cliente = (Cliente) ClientesComboBox.getSelectedItem();
         } catch (ClassCastException ex) {
-            JOptionPane.showMessageDialog(null, "Elija un cliente para crear la venta");
+            JOptionPane.showMessageDialog(null, "Elija un cliente para realizar la venta");
             return;
         }
         
         if(tablaProductosModel.getRowCount() == 0){
-            JOptionPane.showMessageDialog(null, "Agrege al menos un producto para crear la venta");
+            JOptionPane.showMessageDialog(null, "Agrege al menos un producto para realizar la venta");
             return;
         };
         
@@ -506,12 +506,12 @@ public class ManageVentaModal extends javax.swing.JDialog {
         try {
             cliente = (Cliente) ClientesComboBox.getSelectedItem();
         } catch (ClassCastException ex) {
-            JOptionPane.showMessageDialog(null, "Elija un cliente para crear la venta");
+            JOptionPane.showMessageDialog(null, "Elija un cliente para editar la venta");
             return;
         }
         
         if(tablaProductosModel.getRowCount() == 0){
-            JOptionPane.showMessageDialog(null, "Agrege al menos un producto para crear la venta");
+            JOptionPane.showMessageDialog(null, "Agrege al menos un producto para editar la venta");
             return;
         };
         
