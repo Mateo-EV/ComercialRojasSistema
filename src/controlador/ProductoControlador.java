@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import modelo.Producto;
 import modelo.Categoria;
+import modelo.Marca;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -22,7 +23,10 @@ public class ProductoControlador {
 
     static public List<Producto> obtenerProductos() {
         List<Producto> productos = new ArrayList(); // Crea una lista para almacenar los productos recuperados
-        String sql = "SELECT *, (SELECT Categoria.nombre FROM Categoria WHERE Categoria.id = Producto.idCategoria) as categoriaNombre FROM Producto"; // Consulta SQL para seleccionar todas los productos
+        String sql = "SELECT *, "
+                + "(SELECT Categoria.nombre FROM Categoria WHERE Categoria.id = Producto.idCategoria) as categoriaNombre, "
+                + "(SELECT Marca.nombre FROM Marca WHERE Marca.id = Producto.idMarca) as marcaNombre "
+                + "FROM Producto ORDER BY Producto.id";
 
         try {
             Statement st = Conexion.db.createStatement(); // Crea una declaración SQL para ejecutar la consulta
@@ -35,11 +39,14 @@ public class ProductoControlador {
                 double precio = rs.getDouble("precio");
                 String nombre = rs.getString("nombre");
                 String descripcion = rs.getString("descripcion");
-                String marca = rs.getString("marca");
 
                 Categoria categoria = new Categoria();
                 categoria.setId(rs.getInt("idCategoria"));
                 categoria.setNombre(rs.getString("categoriaNombre"));
+                
+                Marca marca = new Marca();
+                marca.setId(rs.getInt("idMarca"));
+                marca.setNombre(rs.getString("marcaNombre"));
 
                 productos.add(new Producto(id, nombre, descripcion, marca, stock, precio, categoria));
             }
@@ -58,11 +65,16 @@ public class ProductoControlador {
         try {
             PreparedStatement pst = Conexion.db.prepareStatement("INSERT INTO Producto VALUES (?, ?, ?, ?, ?, ?)");
             pst.setString(1, producto.getNombre());
-            pst.setString(2, producto.getMarca());
-            pst.setInt(3, producto.getStock());
-            pst.setDouble(4, producto.getPrecio());
-            pst.setInt(5, producto.getCategoria().getId());
-            pst.setString(6, producto.getDescripcion());
+            pst.setInt(2, producto.getStock());
+            pst.setDouble(3, producto.getPrecio());
+            pst.setInt(4, producto.getCategoria().getId());
+            pst.setString(5, producto.getDescripcion());
+            if(producto.getMarca() != null){
+                pst.setInt(6, producto.getMarca().getId());
+            } else {
+                pst.setNull(6, 0);
+            }
+            
 
             if (pst.executeUpdate() > 0) {
                 respuesta = true;
@@ -78,11 +90,16 @@ public class ProductoControlador {
     static public boolean actualizarProducto(Producto producto) {
         boolean respuesta = false;
         try {
-            PreparedStatement pst = Conexion.db.prepareStatement("UPDATE Producto SET nombre=?, descripcion=?, marca=?, precio=?, idCategoria=?, stock=? WHERE id='" + producto.getId() + "'");
+            PreparedStatement pst = Conexion.db.prepareStatement("UPDATE Producto SET nombre=?, descripcion=?, idMarca=?, precio=?, idCategoria=?, stock=? WHERE id='" + producto.getId() + "'");
 
             pst.setString(1, producto.getNombre());
             pst.setString(2, producto.getDescripcion());
-            pst.setString(3, producto.getMarca());
+            if(producto.getMarca() == null){
+                pst.setNull(3, 0);
+            } else {
+                pst.setInt(3, producto.getMarca().getId());
+            }
+            
             pst.setDouble(4, producto.getPrecio());
             pst.setInt(5, producto.getCategoria().getId());
             pst.setInt(6, producto.getStock());
@@ -98,7 +115,10 @@ public class ProductoControlador {
     }
 
     static public Producto obtenerProducto(String idProducto) {
-        String sql = "SELECT Producto.*, (SELECT Categoria.nombre FROM Categoria WHERE Categoria.id = Producto.idCategoria) as categoriaNombre  FROM Producto WHERE id='" + idProducto + "'";
+        String sql = "SELECT Producto.*, "
+                + "(SELECT Categoria.nombre FROM Categoria WHERE Categoria.id = Producto.idCategoria) as categoriaNombre, "
+                + "(SELECT Marca.nombre FROM Marca WHERE Marca.id = Producto.idMarca) as marcaNombre "
+                + "FROM Producto WHERE id='" + idProducto + "'";
         Producto producto = null;
         try {
             Statement st = Conexion.db.createStatement();
@@ -109,11 +129,14 @@ public class ProductoControlador {
                 double precio = rs.getDouble("precio");
                 String nombre = rs.getString("nombre");
                 String descripcion = rs.getString("descripcion");
-                String marca = rs.getString("marca");
 
                 Categoria categoria = new Categoria();
                 categoria.setId(rs.getInt("idCategoria"));
                 categoria.setNombre(rs.getString("categoriaNombre"));
+                
+                Marca marca = new Marca();
+                marca.setId(rs.getInt("idMarca"));
+                marca.setNombre(rs.getString("marcaNombre"));
 
                 producto = new Producto(id, nombre, descripcion, marca, stock, precio, categoria);
             }

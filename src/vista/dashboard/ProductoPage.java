@@ -148,7 +148,7 @@ public class ProductoPage extends javax.swing.JPanel {
                 producto.getNombre(),
                 producto.getStock(),
                 producto.getPrecio(),
-                producto.getMarca(),
+                producto.getMarca().getNombre(),
                 producto.getDescripcion(),
                 producto.getCategoria().getNombre(),
                 manageModelProps

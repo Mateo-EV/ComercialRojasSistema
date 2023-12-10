@@ -40,6 +40,7 @@ public class ManageVentaModal extends javax.swing.JDialog {
         initComponents();
         cargarClientes();
         cargarProductos();
+        GenerarFacturaPdf.setVisible(false);
     }
     
     private List<Cliente> clientes;
@@ -189,6 +190,7 @@ public class ManageVentaModal extends javax.swing.JDialog {
         TotalInput = new javax.swing.JTextField();
         crearVentaButton = new components.jButton();
         deleteProduct = new javax.swing.JButton();
+        GenerarFacturaPdf = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -257,6 +259,16 @@ public class ManageVentaModal extends javax.swing.JDialog {
             }
         });
 
+        GenerarFacturaPdf.setBackground(new java.awt.Color(255, 204, 0));
+        GenerarFacturaPdf.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        GenerarFacturaPdf.setForeground(new java.awt.Color(0, 0, 0));
+        GenerarFacturaPdf.setText("Generar Factura");
+        GenerarFacturaPdf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GenerarFacturaPdfActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -298,6 +310,8 @@ public class ManageVentaModal extends javax.swing.JDialog {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(TotalInput, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(GenerarFacturaPdf, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
                                 .addComponent(crearVentaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(subTotalInput, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -343,7 +357,8 @@ public class ManageVentaModal extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(TotalInput, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
-                    .addComponent(crearVentaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(crearVentaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GenerarFacturaPdf, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(44, Short.MAX_VALUE))
         );
 
@@ -418,7 +433,7 @@ public class ManageVentaModal extends javax.swing.JDialog {
             total += ventaProducto.getTotal();
             subTotal += ventaProducto.getSubTotal();
         }
-        
+        total = (double) Math.round(total*100) / 100;
         IGV = (double) Math.round((total - subTotal)*100) / 100;
         
         TotalInput.setText(String.valueOf(total));
@@ -466,6 +481,10 @@ public class ManageVentaModal extends javax.swing.JDialog {
         if(tablaProductosModel.getRowCount() == 0) deleteProduct.setEnabled(false);
     }//GEN-LAST:event_deleteProductActionPerformed
 
+    private void GenerarFacturaPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerarFacturaPdfActionPerformed
+        VentaControlador.generarFactura(idVenta);
+    }//GEN-LAST:event_GenerarFacturaPdfActionPerformed
+
     private void crearNuevaVenta(){
         Venta venta = new Venta();
         Cliente cliente;
@@ -489,10 +508,12 @@ public class ManageVentaModal extends javax.swing.JDialog {
         
         venta.setCliente(cliente);
         
-        if(VentaControlador.crearVenta(venta)){
+        int id = VentaControlador.crearVenta(venta);
+        if(id >= 0){
             JOptionPane.showMessageDialog(null, "Registro guardado");
             VentaPage.recagarTabla();
             dispose();
+            VentaControlador.generarFactura(String.valueOf(id));
         } else {
             JOptionPane.showMessageDialog(null, "Error al guardar");
         }
@@ -556,6 +577,7 @@ public class ManageVentaModal extends javax.swing.JDialog {
     private components.jInput BuscarClienteInput;
     private components.jInput BuscarProductoInput;
     private javax.swing.JComboBox<String> ClientesComboBox;
+    private javax.swing.JButton GenerarFacturaPdf;
     private javax.swing.JTextField IGVInput;
     private javax.swing.JComboBox<String> ProductosComboBox;
     private javax.swing.JTable TablaProductos;

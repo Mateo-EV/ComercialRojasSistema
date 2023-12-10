@@ -27,30 +27,36 @@
               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="jButton1" min="-2" pref="90" max="-2" attributes="0"/>
-                  <Group type="102" alignment="1" attributes="0">
+                  <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="nameInput" alignment="0" min="-2" pref="249" max="-2" attributes="0"/>
-                                  <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="precioInput" alignment="0" min="-2" pref="249" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="descripcionInput" min="-2" pref="255" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="descripcionInput" alignment="0" min="-2" pref="255" max="-2" attributes="0"/>
+                                  <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="precioInput" alignment="0" min="-2" pref="249" max="-2" attributes="0"/>
+                              </Group>
                               <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                          <Component id="stockInput" max="32767" attributes="0"/>
+                          <Component id="stockInput" min="-2" pref="249" max="-2" attributes="0"/>
                           <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="marcaInput" alignment="0" pref="249" max="32767" attributes="0"/>
-                          <Component id="CategoriaComboBox" alignment="1" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="MarcaComboBox" min="-2" pref="204" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="GestionarMarca" min="-2" pref="38" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
+                          <Component id="CategoriaComboBox" alignment="0" min="-2" pref="249" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -84,27 +90,25 @@
                       <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="marcaInput" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                           <Component id="descripcionInput" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
+                          <Component id="MarcaComboBox" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
+                          <Component id="GestionarMarca" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="precioInput" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
-                          <Component id="CategoriaComboBox" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
-                  </Group>
+              <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="precioInput" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
+                  <Component id="CategoriaComboBox" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jButton1" min="-2" pref="38" max="-2" attributes="0"/>
-              <EmptySpace pref="23" max="32767" attributes="0"/>
+              <EmptySpace pref="26" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -171,14 +175,6 @@
         <Property name="text" type="java.lang.String" value="Marca"/>
       </Properties>
     </Component>
-    <Component class="components.jInput" name="marcaInput">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Ingrese la marca"/>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new components.jInput(&quot;Ingrese la marca&quot;)"/>
-      </AuxValues>
-    </Component>
     <Component class="components.jInput" name="precioInput">
       <Properties>
         <Property name="text" type="java.lang.String" value="Ingrese el precio"/>
@@ -206,6 +202,24 @@
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="MarcaComboBox">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="0"/>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
+    </Component>
+    <Component class="components.jButton" name="GestionarMarca">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="+"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="GestionarMarcaActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

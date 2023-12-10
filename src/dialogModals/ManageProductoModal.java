@@ -6,6 +6,7 @@ package dialogModals;
 
 import controlador.CategoriaControlador;
 import controlador.ProductoControlador;
+import controlador.MarcaControlador;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import javax.swing.JOptionPane;
@@ -13,6 +14,7 @@ import modelo.Categoria;
 import vista.dashboard.CategoriaPage;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import modelo.Marca;
 import modelo.Producto;
 import vista.dashboard.ProductoPage;
 
@@ -29,25 +31,30 @@ public class ManageProductoModal extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         cargarCategoriasEnCombobox();
+        cargarMarcasEnCombobox();
     }
     
     private String idProducto;
     private int idCategoria = -1;
+    private int idMarca = -1;
+    java.awt.Frame parent;
     
     public ManageProductoModal(java.awt.Frame parent, boolean modal, String id) {
         super(parent, modal);
+        this.parent = parent;
         Producto producto = ProductoControlador.obtenerProducto(id);
         
         this.idProducto = id;
         this.idCategoria = producto.getCategoria().getId();
+        this.idMarca = producto.getMarca().getId();
         
         initComponents();
         cargarCategoriasEnCombobox();
+        cargarMarcasEnCombobox();
         
         jLabel1.setText("Editar Producto");
         nameInput.setValue(producto.getNombre());
         descripcionInput.setValue(producto.getDescripcion());
-        marcaInput.setValue(producto.getMarca());
         stockInput.setValue(String.valueOf(producto.getStock()));
         precioInput.setValue(String.valueOf(producto.getPrecio()));
         
@@ -72,7 +79,24 @@ public class ManageProductoModal extends javax.swing.JDialog {
             
     }
     
+    private void cargarMarcasEnCombobox(){
+        MarcaComboBoxModel.addElement("Seleccionar Marca");
+        List<Marca> marcas = MarcaControlador.obtenerMarcas();
+        int indexSelected = 0;
+        for (int i = 0; i < marcas.size(); i++) {
+            MarcaComboBoxModel.addElement(marcas.get(i));
+            if(this.idMarca == marcas.get(i).getId()){
+                indexSelected = i+1; 
+            }
+        }
+        MarcaComboBox.setModel(MarcaComboBoxModel);
+        if(indexSelected >= 1){
+            MarcaComboBox.setSelectedIndex(indexSelected);
+        }
+    }
+    
     private DefaultComboBoxModel CategoriaComboBoxModel = new DefaultComboBoxModel();
+    private DefaultComboBoxModel MarcaComboBoxModel = new DefaultComboBoxModel();
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -91,11 +115,12 @@ public class ManageProductoModal extends javax.swing.JDialog {
         jLabel4 = new javax.swing.JLabel();
         stockInput = new components.jInput("Ingrese el stock inicial");
         jLabel5 = new javax.swing.JLabel();
-        marcaInput = new components.jInput("Ingrese la marca");
         precioInput = new components.jInput("Ingrese el precio");
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         CategoriaComboBox = new javax.swing.JComboBox<>();
+        MarcaComboBox = new javax.swing.JComboBox<>();
+        GestionarMarca = new components.jButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -124,13 +149,18 @@ public class ManageProductoModal extends javax.swing.JDialog {
 
         jLabel5.setText("Marca");
 
-        marcaInput.setText("Ingrese la marca");
-
         precioInput.setText("Ingrese el precio");
 
         jLabel6.setText("Precio");
 
         jLabel7.setText("Categoria");
+
+        GestionarMarca.setText("+");
+        GestionarMarca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GestionarMarcaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -146,20 +176,24 @@ public class ManageProductoModal extends javax.swing.JDialog {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel2)
                                     .addComponent(jLabel3)
-                                    .addComponent(nameInput, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel6)
-                                    .addComponent(precioInput, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(nameInput, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(38, 38, 38))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(descripcionInput, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(descripcionInput, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(precioInput, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(32, 32, 32)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel7)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
-                            .addComponent(stockInput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(stockInput, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5)
-                            .addComponent(marcaInput, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
-                            .addComponent(CategoriaComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(MarcaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(GestionarMarca, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel7)
+                            .addComponent(CategoriaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(29, Short.MAX_VALUE))
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -185,21 +219,20 @@ public class ManageProductoModal extends javax.swing.JDialog {
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(marcaInput, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(descripcionInput, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(precioInput, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(CategoriaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addGap(43, 43, 43)))
+                            .addComponent(descripcionInput, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(MarcaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(GestionarMarca, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(8, 8, 8)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(precioInput, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CategoriaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         pack();
@@ -212,15 +245,21 @@ public class ManageProductoModal extends javax.swing.JDialog {
             crearNuevoProducto();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void GestionarMarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GestionarMarcaActionPerformed
+        ManageMarcaModal dialog = new ManageMarcaModal(parent, true, MarcaComboBoxModel);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_GestionarMarcaActionPerformed
+
     private void crearNuevoProducto(){
         Producto producto = new Producto();
 
         String nombre = nameInput.getValue();
         String descripcion = descripcionInput.getValue();
-        String marca = marcaInput.getValue();
         double precio;
         int stock;
         Categoria categoria;
+        Marca marca;
         
         if(nombre.isEmpty() || descripcion.isEmpty()){
             JOptionPane.showMessageDialog(null, "Complete todos los campos");
@@ -248,6 +287,12 @@ public class ManageProductoModal extends javax.swing.JDialog {
             return;
         }
         
+        try {
+            marca = (Marca) MarcaComboBox.getSelectedItem();
+        } catch (ClassCastException ex) {
+            marca = null;
+        }
+        
         producto.setNombre(nombre);
         producto.setDescripcion(descripcion);
         producto.setMarca(marca);
@@ -269,10 +314,10 @@ public class ManageProductoModal extends javax.swing.JDialog {
 
         String nombre = nameInput.getValue();
         String descripcion = descripcionInput.getValue();
-        String marca = marcaInput.getValue();
         double precio;
         int stock;
         Categoria categoria;
+        Marca marca;
         
         if(nombre.isEmpty() || descripcion.isEmpty()){
             JOptionPane.showMessageDialog(null, "Complete todos los campos");
@@ -302,6 +347,12 @@ public class ManageProductoModal extends javax.swing.JDialog {
         } catch (ClassCastException ex) {
             JOptionPane.showMessageDialog(null, "Elija una categoria para el producto");
             return;
+        }
+        
+        try {
+            marca = (Marca) MarcaComboBox.getSelectedItem();
+        } catch (ClassCastException ex) {
+            marca = null;
         }
         
         producto.setId(Integer.parseInt(idProducto));
@@ -343,6 +394,8 @@ public class ManageProductoModal extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> CategoriaComboBox;
+    private components.jButton GestionarMarca;
+    private javax.swing.JComboBox<String> MarcaComboBox;
     private components.jInput descripcionInput;
     private components.jButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -352,7 +405,6 @@ public class ManageProductoModal extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private components.jInput marcaInput;
     private components.jInput nameInput;
     private components.jInput precioInput;
     private components.jInput stockInput;

@@ -92,7 +92,6 @@ public class VentaProducto {
     public double calcularTotal(){
         double subTotal = getSubTotal();
         this.total = (double) Math.round((subTotal + subTotal*0.18) * 100) / 100;
-        
         return this.total;
     }
 

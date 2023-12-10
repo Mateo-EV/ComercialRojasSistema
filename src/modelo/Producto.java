@@ -13,7 +13,9 @@ public class Producto {
     private int id;
     private String nombre;
     private String descripcion;
-    private String marca;
+    
+    private int idMarca;
+    private Marca marca;
     
     private int stock;
     private double precio;
@@ -21,17 +23,17 @@ public class Producto {
     private int idCategoria;
     private Categoria categoria;
     
-    public Producto(int id, String nombre, String descripcion, String marca, int stock, double precio, int idCategoria) {
+    public Producto(int id, String nombre, String descripcion, int idMarca, int stock, double precio, int idCategoria) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.marca = marca;
+        this.idMarca = idMarca;
         this.stock = stock;
         this.precio = precio;
         this.idCategoria = idCategoria;
     }
     
-    public Producto(int id, String nombre, String descripcion, String marca, int stock, double precio, Categoria categoria) {
+    public Producto(int id, String nombre, String descripcion, Marca marca, int stock, double precio, Categoria categoria) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -99,11 +101,19 @@ public class Producto {
         this.categoria = categoria;
     }
 
-    public String getMarca() {
+    public int getIdMarca() {
+        return idMarca;
+    }
+
+    public void setIdMarca(int idMarca) {
+        this.idMarca = idMarca;
+    }
+
+    public Marca getMarca() {
         return marca;
     }
 
-    public void setMarca(String marca) {
+    public void setMarca(Marca marca) {
         this.marca = marca;
     }
 
@@ -111,6 +121,4 @@ public class Producto {
     public String toString() {
         return nombre;
     }
-    
-    
 }
