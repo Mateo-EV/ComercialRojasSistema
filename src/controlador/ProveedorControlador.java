@@ -42,6 +42,34 @@ public class ProveedorControlador {
         
         return proveedores;
     }
+    static public List<Proveedor> obtenerProveedores(String search){
+        List<Proveedor> proveedores = new ArrayList<>();
+        String sql = "SELECT * FROM Proveedor "
+                + "WHERE nombre like '%"+search+"%' OR "
+                + "telefono like '%"+search+"%' OR "
+                + "email like '%"+search+"%' OR "
+                + "direccion like '%"+search+"%'";
+        
+        try {
+            Statement st = Conexion.db.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            
+            while(rs.next()){
+                int id = rs.getInt("id");
+                String nombre = rs.getString("nombre");
+                String direccion = rs.getString("direccion");
+                String telefono = rs.getString("telefono");
+                String email = rs.getString("email");
+                
+                proveedores.add(new Proveedor(id, nombre, direccion, telefono, email));
+            }
+            
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        
+        return proveedores;
+    }
     
     static public boolean crearProveedor(Proveedor proveedor){
         boolean respuesta = false;

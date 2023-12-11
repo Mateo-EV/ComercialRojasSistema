@@ -9,11 +9,13 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import components.ManageButtonCellRenderer;
 import components.ManageButtonEditorRenderer;
+import conexion.Conexion;
 import dialogModals.ManageProductoModal;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.table.TableColumn;
 import modelo.Producto;
+import modelo.Rol;
 
 /**
  *
@@ -30,6 +32,9 @@ public class ProductoPage extends javax.swing.JPanel {
         this.parent = parent; // Establece el JFrame padre
         
         configurarTabla();
+        if(Conexion.session.getIdRol() != Rol.ADMINISTRADOR){
+            OpenModalButton.setVisible(false);
+        }
     }
     private static void configurarTabla(){
         TableColumn columnActions = jTable1.getColumnModel().getColumn(7);
@@ -129,7 +134,7 @@ public class ProductoPage extends javax.swing.JPanel {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(OpenModalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(BuscarProductoInput, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton2)))
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
                 .addGap(31, 31, 31))

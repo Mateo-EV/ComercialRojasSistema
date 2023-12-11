@@ -79,6 +79,47 @@ public class UsuarioControlador {
         return usuarios;
     }
     
+    static public List<Usuario> obtenerUsuarios(String search){
+        List<Usuario> usuarios = new ArrayList(); // Crea una lista para almacenar los productos recuperados
+        String sql = "SELECT Usuario.*, Rol.nombre as rolNombre FROM Usuario "
+                + "INNER JOIN Rol ON Rol.id = Usuario.idRol "
+                + "WHERE Usuario.nombre like '%"+search+"%' OR "
+                + "apellido like '%"+search+"%' OR "
+                + "telefono like '%"+search+"%' OR "
+                + "email like '%"+search+"%' OR "
+                + "dni like '%"+search+"%' OR "
+                + "Rol.nombre like '%"+search+"%'"; // Consulta SQL para seleccionar todas los productos
+        
+        try {
+            Statement st = Conexion.db.createStatement(); // Crea una declaración SQL para ejecutar la consulta
+            ResultSet rs = st.executeQuery(sql); // Ejecuta la consulta y obtiene el conjunto de resultados
+            
+            // Itera a través de los resultados y crea objetos Producto, luego los agrega a la lista de los productos
+            while(rs.next()){
+                String id = rs.getString("id");
+                String nombre = rs.getString("nombre");
+                String apellido = rs.getString("apellido");
+                String telefono = rs.getString("telefono");
+                String email = rs.getString("email");
+                String dni = rs.getString("dni");
+                boolean estado = rs.getBoolean("estado");
+                
+                Rol rol = new Rol();
+                rol.setId(rs.getInt("idRol"));
+                rol.setNombre(rs.getString("rolNombre"));
+                
+                usuarios.add(new Usuario(id, nombre, apellido, telefono, dni, email, estado, rol));
+            }
+            
+        } catch (SQLException e) {
+            // Captura cualquier excepción SQL que pueda ocurrir durante la recuperación y muestra un mensaje de error
+            System.out.println("Error: " + e.getMessage());
+        }
+        
+        // Devuelve la lista de los productos recuperados desde la base de datos
+        return usuarios;
+    }
+    
     static public boolean crearUsuario(Usuario usuario){
         boolean respuesta = false;
         try {

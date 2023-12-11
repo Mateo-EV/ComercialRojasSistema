@@ -90,6 +90,47 @@ public class UsuarioPage extends javax.swing.JPanel {
         return tableModel; // Devuelve el modelo de tabla lleno con los datos de las categorías
     }
     
+    static public DefaultTableModel cargarTablaUsuarios(String search){
+        DefaultTableModel tableModel = new DefaultTableModel(); // Crea un modelo de tabla
+        
+        // Obtiene la lista de categorías desde el controlador de categorías
+        List<Usuario> usuarios = UsuarioControlador.obtenerUsuarios(search);
+  
+        // Agrega las columnas al modelo de tabla
+        tableModel.addColumn("Id");
+        tableModel.addColumn("Nombre");
+        tableModel.addColumn("Apellido");
+        tableModel.addColumn("DNI");
+        tableModel.addColumn("Email");
+        tableModel.addColumn("Telefono");
+        tableModel.addColumn("Rol");
+        tableModel.addColumn("Estado");
+        tableModel.addColumn("Acciones");
+        
+        // Llena el modelo de tabla con los datos de las categorías
+        for (Usuario usuario : usuarios) {
+            Map<String, Object> manageModelProps = new HashMap<>();
+            manageModelProps.put("model", "Usuario");
+            manageModelProps.put("idModel", usuario.getId());
+            
+            Object fila[] = {
+                usuario.getId(),
+                usuario.getNombre(),
+                usuario.getApellido(),
+                usuario.getDni(),
+                usuario.getEmail(),
+                usuario.getTelefono(),
+                usuario.getRol().getNombre(),
+                usuario.getEstado() ? "Activo" : "Inactivo",
+                manageModelProps
+            };
+            
+            tableModel.addRow(fila); // Agrega una fila al modelo de tabla
+        }
+        
+        return tableModel; // Devuelve el modelo de tabla lleno con los datos de las categorías
+    }
+    
     private javax.swing.JFrame parent;
 
     /**
@@ -104,8 +145,9 @@ public class UsuarioPage extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jInput1 = new components.jInput("Buscar usuarios");
+        BuscarUsuarioInput = new components.jInput("Buscar usuarios");
         jButton1 = new components.jButton();
+        jButton2 = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -115,12 +157,19 @@ public class UsuarioPage extends javax.swing.JPanel {
         jTable1.setModel(cargarTablaUsuarios());
         jScrollPane1.setViewportView(jTable1);
 
-        jInput1.setText("Buscar usuarios");
+        BuscarUsuarioInput.setText("Buscar usuarios");
 
         jButton1.setText("Agregar Usuario");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Buscar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
             }
         });
 
@@ -136,8 +185,10 @@ public class UsuarioPage extends javax.swing.JPanel {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jInput1, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
-                        .addGap(417, 417, 417)
+                        .addComponent(BuscarUsuarioInput, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2)
+                        .addGap(335, 335, 335)
                         .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(31, 31, 31))
         );
@@ -149,7 +200,8 @@ public class UsuarioPage extends javax.swing.JPanel {
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jInput1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(BuscarUsuarioInput, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
                 .addGap(31, 31, 31))
@@ -162,10 +214,17 @@ public class UsuarioPage extends javax.swing.JPanel {
         dialog.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        String nombreUsuario = BuscarUsuarioInput.getValue();
+        jTable1.setModel(cargarTablaUsuarios(nombreUsuario));
+        configurarTabla();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private components.jInput BuscarUsuarioInput;
     private components.jButton jButton1;
-    private components.jInput jInput1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     public static javax.swing.JTable jTable1;

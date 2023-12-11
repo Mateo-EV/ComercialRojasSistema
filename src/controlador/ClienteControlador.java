@@ -46,6 +46,41 @@ public class ClienteControlador {
         return clientes;
     }
     
+    static public List<Cliente> obtenerClientes(String search){
+        List<Cliente> clientes = new ArrayList<>();
+        String sql = "SELECT * FROM Cliente "
+                + "WHERE nombre like '%"+search+"%' OR "
+                + "dni_ruc like '%"+search+"%' OR "
+                + "telefono like '%"+search+"%' OR "
+                + "email like '%"+search+"%' OR "
+                + "direccion like '%"+search+"%' OR "
+                + "tipoCliente like '%"+search+"%' OR "
+                + "apellido like '%"+search+"%'";
+        
+        try {
+            Statement st = Conexion.db.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            
+            while(rs.next()){
+                int id = rs.getInt("id");
+                String nombre = rs.getString("nombre");
+                String apellido = rs.getString("apellido");
+                String dni_ruc = rs.getString("dni_ruc");
+                String email = rs.getString("email");
+                String telefono = rs.getString("telefono");
+                String direccion = rs.getString("direccion");
+                String tipoCliente = rs.getString("tipoCliente");
+                
+                clientes.add(new Cliente(id, nombre, apellido, dni_ruc, email, telefono, direccion, tipoCliente));
+            }
+            
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        
+        return clientes;
+    }
+    
     static public boolean crearCliente(Cliente cliente){
         boolean respuesta = false;
         try {

@@ -66,8 +66,9 @@ public class ProveedorPage extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jInput1 = new components.jInput("Buscar proveedores");
+        BuscarProveedoresInput = new components.jInput("Buscar proveedores");
         OpenModalButton = new components.jButton();
+        jButton1 = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -77,12 +78,19 @@ public class ProveedorPage extends javax.swing.JPanel {
         jTable1.setModel(this.cargarTablaProveedores());
         jScrollPane1.setViewportView(jTable1);
 
-        jInput1.setText("Buscar proveedores");
+        BuscarProveedoresInput.setText("Buscar proveedores");
 
         OpenModalButton.setText("Agregar Proveedor");
         OpenModalButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 OpenModalButtonActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Buscar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -95,8 +103,10 @@ public class ProveedorPage extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jInput1, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
-                        .addGap(417, 417, 417)
+                        .addComponent(BuscarProveedoresInput, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)
+                        .addGap(335, 335, 335)
                         .addComponent(OpenModalButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -109,9 +119,11 @@ public class ProveedorPage extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1)
                 .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(OpenModalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jInput1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(OpenModalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(BuscarProveedoresInput, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
                 .addGap(31, 31, 31))
@@ -124,6 +136,12 @@ public class ProveedorPage extends javax.swing.JPanel {
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
     }//GEN-LAST:event_OpenModalButtonActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String nombreCategoria = BuscarProveedoresInput.getValue();
+        jTable1.setModel(cargarTablaProveedores(nombreCategoria));
+        configurarTabla();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     static public DefaultTableModel cargarTablaProveedores(){
@@ -159,11 +177,48 @@ public class ProveedorPage extends javax.swing.JPanel {
         }
         
         return tableModel; // Devuelve el modelo de tabla lleno con los datos de las categorías
+    }                                        
+
+
+    static public DefaultTableModel cargarTablaProveedores(String search){
+        DefaultTableModel tableModel = new DefaultTableModel(); // Crea un modelo de tabla
+        
+        // Obtiene la lista de categorías desde el controlador de categorías
+        List<Proveedor> proveedores = ProveedorControlador.obtenerProveedores(search);
+  
+        // Agrega las columnas al modelo de tabla
+        tableModel.addColumn("Id");
+        tableModel.addColumn("Nombre");
+        tableModel.addColumn("Direccion");
+        tableModel.addColumn("Telefono");
+        tableModel.addColumn("Email");
+        tableModel.addColumn("Acciones");
+        
+        // Llena el modelo de tabla con los datos de las categorías
+        for (Proveedor proveedor : proveedores) {
+            Map<String, Object> manageModelProps = new HashMap();
+            manageModelProps.put("model", "Proveedor");
+            manageModelProps.put("idModel", proveedor.getId());
+            
+            Object fila[] = {
+                proveedor.getId(),
+                proveedor.getNombre(),
+                proveedor.getDireccion(),
+                proveedor.getTelefono(),
+                proveedor.getEmail(),
+                manageModelProps
+            };
+            
+            tableModel.addRow(fila); // Agrega una fila al modelo de tabla
+        }
+        
+        return tableModel; // Devuelve el modelo de tabla lleno con los datos de las categorías
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private components.jInput BuscarProveedoresInput;
     private components.jButton OpenModalButton;
-    private components.jInput jInput1;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     public static javax.swing.JTable jTable1;
