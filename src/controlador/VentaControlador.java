@@ -17,6 +17,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import java.util.List;
 import conexion.Conexion;
+import static controlador.ProductoControlador.obtenerProductos;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,8 +26,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import modelo.Venta;
 import modelo.Usuario;
@@ -39,11 +42,19 @@ import modelo.VentaProducto;
  * @author intel
  */
 public class VentaControlador {
-    static public List<Venta> obtenerVentas(){
+    static public List<Venta> obtenerVentas(String fechaInicio, String fechaFin){
         List<Venta> ventas = new ArrayList<>();
         String sql = "SELECT Venta.*, Usuario.nombre as UsuarioNombre, Cliente.nombre as ClienteNombre "+
                         "FROM Venta INNER JOIN Usuario ON Venta.idUsuario = Usuario.id " + 
                         "INNER JOIN Cliente ON Venta.idCliente = Cliente.id";
+        
+        if(!fechaInicio.isEmpty() && !fechaFin.isEmpty()){
+            LocalDate fecha = LocalDate.parse(fechaFin);
+            String fecha_fin = fecha.plusDays(1).toString();
+            String fechaInicioFormatted = fechaInicio.replace("-", "");
+            String fechaFinFormatted = fecha_fin.replace("-", "");
+            sql += " WHERE Venta.fecha BETWEEN '"+fechaInicioFormatted +"' AND '"+fechaFinFormatted+"'";
+        }
         
         try {
             Statement st = Conexion.db.createStatement();
@@ -419,6 +430,97 @@ public class VentaControlador {
             Desktop.getDesktop().open(file);
             
         } catch(DocumentException | IOException e){
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+    
+    static public void generarReporte(String fechaInicio, String fechaFin){
+        try {
+            FileOutputStream archivo;
+            File file = new File("src/pdf/ventas_" + fechaInicio + "_" + fechaFin+ ".pdf");
+            archivo = new FileOutputStream(file);
+            
+            Document doc = new Document();
+            PdfWriter.getInstance(doc, archivo);
+            doc.open();
+            
+            
+            Paragraph p = new Paragraph();
+            Font negrita = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.DARK_GRAY);
+            Font blanca = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.WHITE);
+            p.add(Chunk.NEWLINE);
+            if(fechaInicio.equals(fechaFin)) p.add("Fecha: " +  fechaInicio);
+            else p.add("Desde: " +  fechaInicio + "\nHasta: " +fechaFin);
+            
+            
+            PdfPTable encabezado = new PdfPTable(2);
+            encabezado.setWidthPercentage(100);
+            encabezado.getDefaultCell().setBorder(0);
+            
+            int columnaWidths[] = new int[]{50, 50};
+            encabezado.setWidths(columnaWidths);
+            encabezado.setHorizontalAlignment(Element.ALIGN_CENTER);
+            
+            Font titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD, BaseColor.DARK_GRAY);
+            
+            Phrase title = new Phrase("Comercial Rojas", titleFont);
+            encabezado.addCell(title);
+            encabezado.addCell(p);
+            
+            doc.add(encabezado);
+            
+            Paragraph clienteP = new Paragraph();
+            clienteP.setFont(negrita);
+            clienteP.add(Chunk.NEWLINE);
+            clienteP.add("Reporte de Ventas" + "\n\n");
+            doc.add(clienteP);
+            
+            PdfPTable tablaVentas = new PdfPTable(5);
+            tablaVentas.setWidthPercentage(100);
+            
+            int columnaWidthsClientes[] = new int[]{25, 25, 25, 25, 25};
+            tablaVentas.setWidths(columnaWidthsClientes);
+            tablaVentas.setHorizontalAlignment(Element.ALIGN_LEFT);
+            PdfPCell producto1 = new PdfPCell(new Phrase("Cliente: ", blanca));
+            PdfPCell producto2 = new PdfPCell(new Phrase("Ganancia: ", blanca));
+            PdfPCell producto3 = new PdfPCell(new Phrase("Usuario: ", blanca));
+            PdfPCell producto4 = new PdfPCell(new Phrase("Fecha: ", blanca));
+            PdfPCell producto5 = new PdfPCell(new Phrase("Hora: ", blanca));
+            
+            producto1.setBorder(0);
+            producto2.setBorder(0);
+            producto3.setBorder(0);
+            producto4.setBorder(0);
+            producto5.setBorder(0);
+            
+            producto1.setBackgroundColor(BaseColor.RED);
+            producto2.setBackgroundColor(BaseColor.RED);
+            producto3.setBackgroundColor(BaseColor.RED);
+            producto4.setBackgroundColor(BaseColor.RED);
+            producto5.setBackgroundColor(BaseColor.RED);
+            
+            tablaVentas.addCell(producto1);
+            tablaVentas.addCell(producto2);
+            tablaVentas.addCell(producto3);
+            tablaVentas.addCell(producto4);
+            tablaVentas.addCell(producto5);
+            
+            List<Venta> ventas = obtenerVentas(fechaInicio, fechaFin);
+            ventas.forEach(venta -> {
+                tablaVentas.addCell(venta.getCliente().getNombre());
+                tablaVentas.addCell("S/."+venta.getGanancia());
+                tablaVentas.addCell(venta.getUsuario().getNombre());
+                tablaVentas.addCell( venta.getFecha().format(DateTimeFormatter.ISO_DATE));
+                tablaVentas.addCell(venta.getFecha().format(DateTimeFormatter.ISO_LOCAL_TIME).substring(0, 5));
+            });
+            
+            doc.add(tablaVentas);
+            
+            doc.close();
+            archivo.close();
+            
+            Desktop.getDesktop().open(file);
+        } catch (DocumentException | IOException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }

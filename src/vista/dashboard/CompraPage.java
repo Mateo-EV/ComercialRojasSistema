@@ -12,11 +12,15 @@ import components.ManageButtonCellRenderer;
 import components.ManageButtonEditorRenderer;
 import controlador.CompraControlador;
 import dialogModals.ManageCompraModal;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Date;
+import javax.swing.JTextField;
 import javax.swing.table.TableColumn;
 import modelo.Compra;
+import java.time.ZoneId;
 
 /**
  *
@@ -31,9 +35,15 @@ public class CompraPage extends javax.swing.JPanel {
     public CompraPage(javax.swing.JFrame parent) {
         initComponents(); // Inicializa los componentes de la interfaz de usuario
         this.parent = parent; // Establece el JFrame padre
-        
-        // Configura el renderizador de celdas para la columna "Acciones" de la tabla
-        configurarTabla();
+        LocalDate fechaLocal = LocalDate.now();
+
+        // Convertir LocalDate a Date
+        Date fechaInicio = Date.from(fechaLocal.withDayOfMonth(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date fechaFin = Date.from(fechaLocal.withDayOfMonth(fechaLocal.lengthOfMonth()).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        FechaInicioInput.setDate(fechaInicio);
+        FechaInicioInput.setMaxSelectableDate(fechaFin);
+        FechaFinInput.setDate(fechaFin);
+        FechaFinInput.setMinSelectableDate(fechaInicio);
     }
     
     private javax.swing.JFrame parent;
@@ -67,23 +77,43 @@ public class CompraPage extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jInput1 = new components.jInput("Buscar compras");
         OpenModalButton = new components.jButton();
+        FechaInicioInput = new com.toedter.calendar.JDateChooser();
+        FechaFinInput = new com.toedter.calendar.JDateChooser();
+        generarReporteCompra = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setText("Compras");
 
-        jTable1.setModel(this.cargarTablaCompras());
         jScrollPane1.setViewportView(jTable1);
-
-        jInput1.setText("Buscar compras");
 
         OpenModalButton.setText("Agregar Compra");
         OpenModalButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 OpenModalButtonActionPerformed(evt);
+            }
+        });
+
+        FechaInicioInput.setDateFormatString("yyyy-MM-dd");
+        FechaInicioInput.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                FechaInicioInputPropertyChange(evt);
+            }
+        });
+
+        FechaFinInput.setDateFormatString("yyyy-MM-dd");
+        FechaFinInput.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                FechaFinInputPropertyChange(evt);
+            }
+        });
+
+        generarReporteCompra.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/img/reportes.png"))); // NOI18N
+        generarReporteCompra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generarReporteCompraActionPerformed(evt);
             }
         });
 
@@ -96,12 +126,16 @@ public class CompraPage extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jInput1, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
-                        .addGap(417, 417, 417)
-                        .addComponent(OpenModalButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(FechaInicioInput, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(FechaFinInput, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
+                        .addGap(178, 178, 178)
+                        .addComponent(generarReporteCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(OpenModalButton, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)))
                 .addGap(31, 31, 31))
         );
         layout.setVerticalGroup(
@@ -109,12 +143,14 @@ public class CompraPage extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1)
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(OpenModalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jInput1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(FechaFinInput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(generarReporteCompra, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(OpenModalButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(FechaInicioInput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 536, Short.MAX_VALUE)
                 .addGap(31, 31, 31))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -126,11 +162,31 @@ public class CompraPage extends javax.swing.JPanel {
         dialog.setVisible(true);
     }//GEN-LAST:event_OpenModalButtonActionPerformed
 
+    private void FechaInicioInputPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_FechaInicioInputPropertyChange
+        Date fechaInicio = FechaInicioInput.getDate();
+        FechaFinInput.setMinSelectableDate(fechaInicio);
+        recagarTabla();
+    }//GEN-LAST:event_FechaInicioInputPropertyChange
+
+    private void FechaFinInputPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_FechaFinInputPropertyChange
+        Date fechaFin = FechaFinInput.getDate();
+        FechaInicioInput.setMaxSelectableDate(fechaFin);
+        recagarTabla();
+    }//GEN-LAST:event_FechaFinInputPropertyChange
+
+    private void generarReporteCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generarReporteCompraActionPerformed
+        String fecha_inicio = ((JTextField) FechaInicioInput.getDateEditor().getUiComponent()).getText();
+        String fecha_fin = ((JTextField) FechaFinInput.getDateEditor().getUiComponent()).getText();
+        CompraControlador.generarReporte(fecha_inicio, fecha_fin);
+    }//GEN-LAST:event_generarReporteCompraActionPerformed
+
     static public DefaultTableModel cargarTablaCompras(){
+        String fecha_inicio = ((JTextField) FechaInicioInput.getDateEditor().getUiComponent()).getText();
+        String fecha_fin = ((JTextField) FechaFinInput.getDateEditor().getUiComponent()).getText();
         DefaultTableModel tableModel = new DefaultTableModel(); // Crea un modelo de tabla
         
         // Obtiene la lista de categorías desde el controlador de categorías
-        List<Compra> compras = CompraControlador.obtenerCompras();
+        List<Compra> compras = CompraControlador.obtenerCompras(fecha_inicio, fecha_fin);
   
         // Agrega las columnas al modelo de tabla
         tableModel.addColumn("Id");
@@ -161,12 +217,17 @@ public class CompraPage extends javax.swing.JPanel {
             tableModel.addRow(fila); // Agrega una fila al modelo de tabla
         }
         
+        if(compras.size() > 0) generarReporteCompra.setEnabled(true);
+        else generarReporteCompra.setEnabled(false);
+        
         return tableModel; // Devuelve el modelo de tabla lleno con los datos de las categorías
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private static com.toedter.calendar.JDateChooser FechaFinInput;
+    private static com.toedter.calendar.JDateChooser FechaInicioInput;
     private components.jButton OpenModalButton;
-    private components.jInput jInput1;
+    private static javax.swing.JButton generarReporteCompra;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     public static javax.swing.JTable jTable1;

@@ -3,11 +3,28 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package controlador;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import conexion.Conexion;
+import static controlador.VentaControlador.obtenerVentas;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -17,16 +34,25 @@ import modelo.CompraProducto;
 import modelo.Producto;
 import modelo.Usuario;
 import modelo.Proveedor;
+import modelo.Venta;
 /**
  *
  * @author intel
  */
 public class CompraControlador {
-    static public List<Compra> obtenerCompras(){
+    static public List<Compra> obtenerCompras(String fechaInicio, String fechaFin){
         List<Compra> compras = new ArrayList<>();
         String sql = "SELECT Compra.*, Usuario.nombre as UsuarioNombre, Proveedor.nombre as ProveedorNombre "+
                         "FROM Compra INNER JOIN Usuario ON Compra.idUsuario = Usuario.id " + 
                         "INNER JOIN Proveedor ON Compra.idProveedor = Proveedor.id";
+        
+        if(!fechaInicio.isEmpty() && !fechaFin.isEmpty()){
+            LocalDate fecha = LocalDate.parse(fechaFin);
+            String fecha_fin = fecha.plusDays(1).toString();
+            String fechaInicioFormatted = fechaInicio.replace("-", "");
+            String fechaFinFormatted = fecha_fin.replace("-", "");
+            sql += " WHERE Compra.fecha BETWEEN '"+fechaInicioFormatted +"' AND '"+fechaFinFormatted+"'";
+        }
         
         try {
             Statement st = Conexion.db.createStatement();
@@ -220,5 +246,96 @@ public class CompraControlador {
         }
         
         return respuesta;
+    }
+    
+    static public void generarReporte(String fechaInicio, String fechaFin){
+        try {
+            FileOutputStream archivo;
+            File file = new File("src/pdf/compras_" + fechaInicio + "_" + fechaFin+ ".pdf");
+            archivo = new FileOutputStream(file);
+            
+            Document doc = new Document();
+            PdfWriter.getInstance(doc, archivo);
+            doc.open();
+            
+            
+            Paragraph p = new Paragraph();
+            Font negrita = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.DARK_GRAY);
+            Font blanca = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.WHITE);
+            p.add(Chunk.NEWLINE);
+            if(fechaInicio.equals(fechaFin)) p.add("Fecha: " +  fechaInicio);
+            else p.add("Desde: " +  fechaInicio + "\nHasta: " +fechaFin);
+            
+            
+            PdfPTable encabezado = new PdfPTable(2);
+            encabezado.setWidthPercentage(100);
+            encabezado.getDefaultCell().setBorder(0);
+            
+            int columnaWidths[] = new int[]{50, 50};
+            encabezado.setWidths(columnaWidths);
+            encabezado.setHorizontalAlignment(Element.ALIGN_CENTER);
+            
+            Font titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD, BaseColor.DARK_GRAY);
+            
+            Phrase title = new Phrase("Comercial Rojas", titleFont);
+            encabezado.addCell(title);
+            encabezado.addCell(p);
+            
+            doc.add(encabezado);
+            
+            Paragraph clienteP = new Paragraph();
+            clienteP.setFont(negrita);
+            clienteP.add(Chunk.NEWLINE);
+            clienteP.add("Reporte de Compras" + "\n\n");
+            doc.add(clienteP);
+            
+            PdfPTable tablaCompras = new PdfPTable(5);
+            tablaCompras.setWidthPercentage(100);
+            
+            int columnaWidthsClientes[] = new int[]{25, 25, 25, 25, 25};
+            tablaCompras.setWidths(columnaWidthsClientes);
+            tablaCompras.setHorizontalAlignment(Element.ALIGN_LEFT);
+            PdfPCell producto1 = new PdfPCell(new Phrase("Proveedor: ", blanca));
+            PdfPCell producto2 = new PdfPCell(new Phrase("Pago: ", blanca));
+            PdfPCell producto3 = new PdfPCell(new Phrase("Usuario: ", blanca));
+            PdfPCell producto4 = new PdfPCell(new Phrase("Fecha: ", blanca));
+            PdfPCell producto5 = new PdfPCell(new Phrase("Hora: ", blanca));
+            
+            producto1.setBorder(0);
+            producto2.setBorder(0);
+            producto3.setBorder(0);
+            producto4.setBorder(0);
+            producto5.setBorder(0);
+            
+            producto1.setBackgroundColor(BaseColor.RED);
+            producto2.setBackgroundColor(BaseColor.RED);
+            producto3.setBackgroundColor(BaseColor.RED);
+            producto4.setBackgroundColor(BaseColor.RED);
+            producto5.setBackgroundColor(BaseColor.RED);
+            
+            tablaCompras.addCell(producto1);
+            tablaCompras.addCell(producto2);
+            tablaCompras.addCell(producto3);
+            tablaCompras.addCell(producto4);
+            tablaCompras.addCell(producto5);
+            
+            List<Compra> compras = obtenerCompras(fechaInicio, fechaFin);
+            compras.forEach(compra -> {
+                tablaCompras.addCell(compra.getProveedor().getNombre());
+                tablaCompras.addCell("S/."+compra.getPago());
+                tablaCompras.addCell(compra.getUsuario().getNombre());
+                tablaCompras.addCell( compra.getFecha().format(DateTimeFormatter.ISO_DATE));
+                tablaCompras.addCell(compra.getFecha().format(DateTimeFormatter.ISO_LOCAL_TIME).substring(0, 5));
+            });
+            
+            doc.add(tablaCompras);
+            
+            doc.close();
+            archivo.close();
+            
+            Desktop.getDesktop().open(file);
+        } catch (DocumentException | IOException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 }
