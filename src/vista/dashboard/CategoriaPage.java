@@ -12,6 +12,7 @@ import components.ManageButtonCellRenderer;
 import components.ManageButtonEditorRenderer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.swing.JTextField;
 import javax.swing.table.TableColumn;
 import modelo.Categoria;
@@ -65,8 +66,9 @@ public class CategoriaPage extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jInput1 = new components.jInput("Buscar categoría");
+        BuscarCategoriaInput = new components.jInput("Buscar categoría");
         OpenModalButton = new components.jButton();
+        jButton1 = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -76,17 +78,19 @@ public class CategoriaPage extends javax.swing.JPanel {
         jTable1.setModel(this.cargarTablaCategorias());
         jScrollPane1.setViewportView(jTable1);
 
-        jInput1.setText("Buscar categoría");
-        jInput1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jInput1ActionPerformed(evt);
-            }
-        });
+        BuscarCategoriaInput.setText("Buscar categoría");
 
         OpenModalButton.setText("Agregar Categoría");
         OpenModalButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 OpenModalButtonActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Buscar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -102,8 +106,10 @@ public class CategoriaPage extends javax.swing.JPanel {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jInput1, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(366, 366, 366)
+                        .addComponent(BuscarCategoriaInput, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)
+                        .addGap(281, 281, 281)
                         .addComponent(OpenModalButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(31, 31, 31))
         );
@@ -115,7 +121,8 @@ public class CategoriaPage extends javax.swing.JPanel {
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(OpenModalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jInput1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(BuscarCategoriaInput, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
                 .addGap(31, 31, 31))
@@ -129,16 +136,50 @@ public class CategoriaPage extends javax.swing.JPanel {
         dialog.setVisible(true);
     }//GEN-LAST:event_OpenModalButtonActionPerformed
 
-    private void jInput1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jInput1ActionPerformed
-        
-    }//GEN-LAST:event_jInput1ActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String nombreCategoria = BuscarCategoriaInput.getValue();
+        jTable1.setModel(cargarTablaCategorias(nombreCategoria));
+        configurarTabla();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
-    static private List<Categoria> categorias;
     static public DefaultTableModel cargarTablaCategorias(){
-        DefaultTableModel tableModel = new DefaultTableModel(); // Crea un modelo de tabla
         
         // Obtiene la lista de categorías desde el controlador de categorías
-        categorias = CategoriaControlador.obtenerCategorias();
+        DefaultTableModel tableModel = new DefaultTableModel();
+        List <Categoria> categorias = CategoriaControlador.obtenerCategorias();
+  
+        // Agrega las columnas al modelo de tabla
+        tableModel.addColumn("Id");
+        tableModel.addColumn("Nombre");
+        tableModel.addColumn("Descripcion");
+        tableModel.addColumn("Acciones");
+        
+        
+        
+        // Llena el modelo de tabla con los datos de las categorías
+        for (Categoria categoria : categorias) {
+            Map<String, Object> manageModelProps = new HashMap();
+            manageModelProps.put("model", "Categoria");
+            manageModelProps.put("idModel", categoria.getId());
+            
+            Object fila[] = {
+                categoria.getId(),
+                categoria.getNombre(),
+                categoria.getDescripcion(),
+                manageModelProps
+            };
+            
+            tableModel.addRow(fila); // Agrega una fila al modelo de tabla
+        }
+        
+        return tableModel; // Devuelve el modelo de tabla lleno con los datos de las categorías
+    }                                                
+
+    static public DefaultTableModel cargarTablaCategorias(String search){
+        
+        // Obtiene la lista de categorías desde el controlador de categorías
+        DefaultTableModel tableModel = new DefaultTableModel();
+        List <Categoria> categorias = CategoriaControlador.obtenerCategorias(search);
   
         // Agrega las columnas al modelo de tabla
         tableModel.addColumn("Id");
@@ -168,8 +209,9 @@ public class CategoriaPage extends javax.swing.JPanel {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private components.jInput BuscarCategoriaInput;
     private components.jButton OpenModalButton;
-    private components.jInput jInput1;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     public static javax.swing.JTable jTable1;

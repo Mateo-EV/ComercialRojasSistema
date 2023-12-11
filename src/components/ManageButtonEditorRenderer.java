@@ -177,6 +177,7 @@ public class ManageButtonEditorRenderer extends AbstractCellEditor implements Ta
         
         switch (model) {
             case "Categoria" -> {
+                CategoriaPage.recagarTabla();
                 int respuesta = JOptionPane.showConfirmDialog(
                         parent,
                         "¿Estás seguro que desea eliminar la categoria?",
@@ -197,6 +198,7 @@ public class ManageButtonEditorRenderer extends AbstractCellEditor implements Ta
                 }
             }
             case "Venta" -> {
+                VentaPage.recagarTabla();
                 int respuesta = JOptionPane.showConfirmDialog(
                         parent,
                         "¿Estás seguro que desea eliminar la venta?",
@@ -214,6 +216,7 @@ public class ManageButtonEditorRenderer extends AbstractCellEditor implements Ta
                 }
             }
             case "Compra" -> {
+                CompraPage.recagarTabla();
                 int respuesta = JOptionPane.showConfirmDialog(
                         parent,
                         "¿Estás seguro que desea eliminar la compra?",
@@ -231,6 +234,7 @@ public class ManageButtonEditorRenderer extends AbstractCellEditor implements Ta
                 }
             }
             case "Producto" -> {
+                ProductoPage.recagarTabla();
                 int respuesta = JOptionPane.showConfirmDialog(
                         parent,
                         "¿Estás seguro que desea eliminar el producto?",
@@ -255,6 +259,7 @@ public class ManageButtonEditorRenderer extends AbstractCellEditor implements Ta
                 
             }
             case "Usuario" -> {
+                UsuarioPage.recagarTabla();
                 int respuesta = JOptionPane.showConfirmDialog(
                         parent,
                         "¿Estás seguro que desea eliminar al usuario?",
@@ -275,6 +280,7 @@ public class ManageButtonEditorRenderer extends AbstractCellEditor implements Ta
                 }
             }
             case "Cliente" -> {
+                ClientePage.recagarTabla();
                 int respuesta = JOptionPane.showConfirmDialog(
                         parent,
                         "¿Estás seguro que desea eliminar al cliente?",
@@ -295,6 +301,7 @@ public class ManageButtonEditorRenderer extends AbstractCellEditor implements Ta
                 }
             }
             case "Proveedor" -> {
+                ProveedorPage.recagarTabla();
                 int respuesta = JOptionPane.showConfirmDialog(
                         parent,
                         "¿Estás seguro que desea eliminar al proveedor?",

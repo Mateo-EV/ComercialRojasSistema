@@ -61,9 +61,10 @@ public class ProductoPage extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jInput1 = new components.jInput("Buscar Productos");
+        BuscarProductoInput = new components.jInput("Buscar Productos");
         OpenModalButton = new components.jButton();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -73,7 +74,7 @@ public class ProductoPage extends javax.swing.JPanel {
         jTable1.setModel(this.cargarTablaProductos());
         jScrollPane1.setViewportView(jTable1);
 
-        jInput1.setText("Buscar productos");
+        BuscarProductoInput.setText("Buscar productos");
 
         OpenModalButton.setText("Agregar Producto");
         OpenModalButton.addActionListener(new java.awt.event.ActionListener() {
@@ -89,6 +90,13 @@ public class ProductoPage extends javax.swing.JPanel {
             }
         });
 
+        jButton2.setText("Buscar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -101,8 +109,10 @@ public class ProductoPage extends javax.swing.JPanel {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jInput1, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
-                        .addGap(355, 355, 355)
+                        .addComponent(BuscarProductoInput, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton2)
+                        .addGap(267, 267, 267)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(OpenModalButton, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)))
@@ -118,7 +128,8 @@ public class ProductoPage extends javax.swing.JPanel {
                     .addComponent(jButton1)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(OpenModalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jInput1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(BuscarProductoInput, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton2)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
                 .addGap(31, 31, 31))
@@ -135,6 +146,12 @@ public class ProductoPage extends javax.swing.JPanel {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         ProductoControlador.generarReporte();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        String nombreCategoria = BuscarProductoInput.getValue();
+        jTable1.setModel(cargarTablaProductos(nombreCategoria));
+        configurarTabla();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     static public DefaultTableModel cargarTablaProductos(){
         DefaultTableModel tableModel = new DefaultTableModel(); // Crea un modelo de tabla
@@ -173,12 +190,52 @@ public class ProductoPage extends javax.swing.JPanel {
         }
         
         return tableModel; // Devuelve el modelo de tabla lleno con los datos de las categorías
+    }                                        
+
+    static public DefaultTableModel cargarTablaProductos(String search){
+        DefaultTableModel tableModel = new DefaultTableModel(); // Crea un modelo de tabla
+        
+        // Obtiene la lista de categorías desde el controlador de categorías
+        List<Producto> productos = ProductoControlador.obtenerProductos(search);
+  
+        // Agrega las columnas al modelo de tabla
+        tableModel.addColumn("Id");
+        tableModel.addColumn("Nombre");
+        tableModel.addColumn("Stock");
+        tableModel.addColumn("Precio");
+        tableModel.addColumn("Marca");
+        tableModel.addColumn("Descripcion");
+        tableModel.addColumn("Categoría");
+        tableModel.addColumn("Acciones");
+        
+        // Llena el modelo de tabla con los datos de las categorías
+        for (Producto producto : productos) {
+            Map<String, Object> manageModelProps = new HashMap();
+            manageModelProps.put("model", "Producto");
+            manageModelProps.put("idModel", producto.getId());
+            
+            Object fila[] = {
+                producto.getId(),
+                producto.getNombre(),
+                producto.getStock(),
+                producto.getPrecio(),
+                producto.getMarca().getNombre(),
+                producto.getDescripcion(),
+                producto.getCategoria().getNombre(),
+                manageModelProps
+            };
+            
+            tableModel.addRow(fila); // Agrega una fila al modelo de tabla
+        }
+        
+        return tableModel; // Devuelve el modelo de tabla lleno con los datos de las categorías
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private components.jInput BuscarProductoInput;
     private components.jButton OpenModalButton;
     private javax.swing.JButton jButton1;
-    private components.jInput jInput1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     public static javax.swing.JTable jTable1;

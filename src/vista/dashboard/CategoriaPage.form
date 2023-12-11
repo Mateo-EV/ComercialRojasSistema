@@ -30,8 +30,10 @@
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="jInput1" min="-2" pref="182" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="366" max="-2" attributes="0"/>
+                      <Component id="BuscarCategoriaInput" pref="183" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="281" max="-2" attributes="0"/>
                       <Component id="OpenModalButton" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -47,7 +49,8 @@
               <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="OpenModalButton" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
-                  <Component id="jInput1" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
+                  <Component id="BuscarCategoriaInput" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
+                  <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
               <Component id="jScrollPane1" pref="534" max="32767" attributes="0"/>
@@ -84,13 +87,10 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="components.jInput" name="jInput1">
+    <Component class="components.jInput" name="BuscarCategoriaInput">
       <Properties>
         <Property name="text" type="java.lang.String" value="Buscar categor&#xed;a"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jInput1ActionPerformed"/>
-      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new components.jInput(&quot;Buscar categor&#xed;a&quot;)"/>
       </AuxValues>
@@ -101,6 +101,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="OpenModalButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButton1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Buscar"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

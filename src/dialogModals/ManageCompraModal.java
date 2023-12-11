@@ -203,15 +203,15 @@ public class ManageCompraModal extends javax.swing.JDialog {
 
         BuscarProveedorInput.setText("Buscar Proveedor");
         BuscarProveedorInput.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                BuscarProveedorInputKeyTyped(evt);
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                BuscarProveedorInputKeyReleased(evt);
             }
         });
 
         BuscarProductoInput.setText("Buscar Producto");
         BuscarProductoInput.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                BuscarProductoInputKeyTyped(evt);
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                BuscarProductoInputKeyReleased(evt);
             }
         });
 
@@ -421,7 +421,12 @@ public class ManageCompraModal extends javax.swing.JDialog {
             editarCompra();
     }//GEN-LAST:event_crearVentaButtonActionPerformed
 
-    private void BuscarProveedorInputKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BuscarProveedorInputKeyTyped
+    private void deleteProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteProductActionPerformed
+        tablaProductosModel.removeRow(TablaProductos.getSelectedRow());
+        if(tablaProductosModel.getRowCount() == 0) deleteProduct.setEnabled(false);
+    }//GEN-LAST:event_deleteProductActionPerformed
+
+    private void BuscarProveedorInputKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BuscarProveedorInputKeyReleased
         String nombreProveedor = BuscarProveedorInput.getValue();
         List <Proveedor> clientesFiltrados = proveedores.stream()
                 .filter(cliente -> cliente.toString().toLowerCase().contains(nombreProveedor.toLowerCase()))
@@ -433,9 +438,9 @@ public class ManageCompraModal extends javax.swing.JDialog {
         
         ProveedoresComboBox.setModel(ProveedorComboBoxModel);
         ProveedoresComboBox.setPopupVisible(true);
-    }//GEN-LAST:event_BuscarProveedorInputKeyTyped
+    }//GEN-LAST:event_BuscarProveedorInputKeyReleased
 
-    private void BuscarProductoInputKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BuscarProductoInputKeyTyped
+    private void BuscarProductoInputKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BuscarProductoInputKeyReleased
         String nombreProducto = BuscarProductoInput.getValue();
         List <Producto> productosFiltrados = productos.stream()
                 .filter(producto -> producto.toString().toLowerCase().contains(nombreProducto.toLowerCase()))
@@ -447,12 +452,7 @@ public class ManageCompraModal extends javax.swing.JDialog {
         
         ProductosComboBox.setModel(ProductoComboBoxModel);
         ProductosComboBox.setPopupVisible(true);
-    }//GEN-LAST:event_BuscarProductoInputKeyTyped
-
-    private void deleteProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteProductActionPerformed
-        tablaProductosModel.removeRow(TablaProductos.getSelectedRow());
-        if(tablaProductosModel.getRowCount() == 0) deleteProduct.setEnabled(false);
-    }//GEN-LAST:event_deleteProductActionPerformed
+    }//GEN-LAST:event_BuscarProductoInputKeyReleased
 
     private void crearNuevaCompra(){
         Compra compra = new Compra();

@@ -215,15 +215,15 @@ public class ManageVentaModal extends javax.swing.JDialog {
 
         BuscarClienteInput.setText("Buscar Cliente");
         BuscarClienteInput.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                BuscarClienteInputKeyTyped(evt);
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                BuscarClienteInputKeyReleased(evt);
             }
         });
 
         BuscarProductoInput.setText("Buscar Producto");
         BuscarProductoInput.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                BuscarProductoInputKeyTyped(evt);
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                BuscarProductoInputKeyReleased(evt);
             }
         });
 
@@ -448,34 +448,6 @@ public class ManageVentaModal extends javax.swing.JDialog {
             editarVenta();
     }//GEN-LAST:event_crearVentaButtonActionPerformed
 
-    private void BuscarClienteInputKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BuscarClienteInputKeyTyped
-        String nombreCliente = BuscarClienteInput.getValue();
-        List <Cliente> clientesFiltrados = clientes.stream()
-                .filter(cliente -> cliente.toString().toLowerCase().contains(nombreCliente.toLowerCase()))
-                .collect(Collectors.toList());
-        
-        ClienteComboBoxModel.removeAllElements();
-        ClienteComboBoxModel.addElement("Seleccionar Cliente");
-        clientesFiltrados.forEach(cliente -> ClienteComboBoxModel.addElement(cliente));
-        
-        ClientesComboBox.setModel(ClienteComboBoxModel);
-        ClientesComboBox.setPopupVisible(true);
-    }//GEN-LAST:event_BuscarClienteInputKeyTyped
-
-    private void BuscarProductoInputKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BuscarProductoInputKeyTyped
-        String nombreProducto = BuscarProductoInput.getValue();
-        List <Producto> productosFiltrados = productos.stream()
-                .filter(producto -> producto.toString().toLowerCase().contains(nombreProducto.toLowerCase()))
-                .collect(Collectors.toList());
-        
-        ProductoComboBoxModel.removeAllElements();
-        ProductoComboBoxModel.addElement("Seleccionar Producto");
-        productosFiltrados.forEach(producto -> ProductoComboBoxModel.addElement(producto));
-        
-        ProductosComboBox.setModel(ProductoComboBoxModel);
-        ProductosComboBox.setPopupVisible(true);
-    }//GEN-LAST:event_BuscarProductoInputKeyTyped
-
     private void deleteProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteProductActionPerformed
         tablaProductosModel.removeRow(TablaProductos.getSelectedRow());
         if(tablaProductosModel.getRowCount() == 0) deleteProduct.setEnabled(false);
@@ -484,6 +456,34 @@ public class ManageVentaModal extends javax.swing.JDialog {
     private void GenerarFacturaPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerarFacturaPdfActionPerformed
         VentaControlador.generarFactura(idVenta);
     }//GEN-LAST:event_GenerarFacturaPdfActionPerformed
+
+    private void BuscarClienteInputKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BuscarClienteInputKeyReleased
+        String nombreCliente = BuscarClienteInput.getValue();
+        List <Cliente> clientesFiltrados = clientes.stream()
+        .filter(cliente -> cliente.toString().toLowerCase().contains(nombreCliente.toLowerCase()))
+        .collect(Collectors.toList());
+        ClienteComboBoxModel.removeAllElements();
+        ClienteComboBoxModel.addElement("Seleccionar Cliente");
+        clientesFiltrados.forEach(cliente -> ClienteComboBoxModel.addElement(cliente));
+
+        ClientesComboBox.setModel(ClienteComboBoxModel);
+        ClientesComboBox.setPopupVisible(true);
+    }//GEN-LAST:event_BuscarClienteInputKeyReleased
+
+    private void BuscarProductoInputKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BuscarProductoInputKeyReleased
+        String nombreProducto = BuscarProductoInput.getValue();
+        List <Producto> productosFiltrados = productos.stream()
+        .filter(producto -> producto.toString().toLowerCase().contains(nombreProducto.toLowerCase()))
+        .collect(Collectors.toList());
+        System.out.println(nombreProducto);
+
+        ProductoComboBoxModel.removeAllElements();
+        ProductoComboBoxModel.addElement("Seleccionar Producto");
+        productosFiltrados.forEach(producto -> ProductoComboBoxModel.addElement(producto));
+
+        ProductosComboBox.setModel(ProductoComboBoxModel);
+        ProductosComboBox.setPopupVisible(true);
+    }//GEN-LAST:event_BuscarProductoInputKeyReleased
 
     private void crearNuevaVenta(){
         Venta venta = new Venta();

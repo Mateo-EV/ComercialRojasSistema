@@ -83,6 +83,49 @@ public class ProductoControlador {
         return productos;
     }
 
+    static public List<Producto> obtenerProductos(String search) {
+        List<Producto> productos = new ArrayList(); // Crea una lista para almacenar los productos recuperados
+        String sql = "SELECT Producto.*, Categoria.nombre as categoriaNombre, Marca.nombre as marcaNombre FROM Producto "
+                + "INNER JOIN Categoria ON Categoria.id = Producto.idCategoria "
+                + "LEFT JOIN Marca ON Marca.id = Producto.idMarca "
+                + "WHERE Producto.nombre like '%"+search+"%' OR "
+                + "Producto.descripcion like '%"+search+"%' OR "
+                + "stock like '%"+search+"%' OR "
+                + "Categoria.nombre like '%"+search+"%' "
+                + "ORDER BY Producto.id";
+
+        try {
+            Statement st = Conexion.db.createStatement(); // Crea una declaración SQL para ejecutar la consulta
+            ResultSet rs = st.executeQuery(sql); // Ejecuta la consulta y obtiene el conjunto de resultados
+
+            // Itera a través de los resultados y crea objetos Producto, luego los agrega a la lista de los productos
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int stock = rs.getInt("stock");
+                double precio = rs.getDouble("precio");
+                String nombre = rs.getString("nombre");
+                String descripcion = rs.getString("descripcion");
+
+                Categoria categoria = new Categoria();
+                categoria.setId(rs.getInt("idCategoria"));
+                categoria.setNombre(rs.getString("categoriaNombre"));
+                
+                Marca marca = new Marca();
+                marca.setId(rs.getInt("idMarca"));
+                marca.setNombre(rs.getString("marcaNombre"));
+
+                productos.add(new Producto(id, nombre, descripcion, marca, stock, precio, categoria));
+            }
+
+        } catch (SQLException e) {
+            // Captura cualquier excepción SQL que pueda ocurrir durante la recuperación y muestra un mensaje de error
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        // Devuelve la lista de los productos recuperados desde la base de datos
+        return productos;
+    }
+
     static public boolean crearProducto(Producto producto) {
         boolean respuesta = false;
         try {
