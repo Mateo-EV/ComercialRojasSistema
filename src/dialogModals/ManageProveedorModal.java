@@ -44,6 +44,28 @@ public class ManageProveedorModal extends javax.swing.JDialog {
         this.idProveedor = id;
         ProveedorPage.recagarTabla();
     }
+    
+    public ManageProveedorModal(java.awt.Frame parent, boolean modal, String id, boolean view) {
+        super(parent, modal);
+        Proveedor proveedor = ProveedorControlador.obtenerProveedor(id);
+        
+        initComponents();
+        
+        jLabel1.setText("Ver Proveedor");
+        nameInput.setValue(proveedor.getNombre());
+        emailInput.setValue(proveedor.getEmail());
+        telefonoInput.setValue(proveedor.getTelefono());
+        direccionInput.setValue(proveedor.getDireccion());
+        
+        jButton1.setVisible(false);
+        nameInput.setEnabled(false);
+        emailInput.setEnabled(false);
+        telefonoInput.setEnabled(false);
+        direccionInput.setEnabled(false);
+        
+        this.idProveedor = id;
+        ProveedorPage.recagarTabla();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -191,34 +213,34 @@ public class ManageProveedorModal extends javax.swing.JDialog {
     
     private void editarProveedor() {
         try {
-        Proveedor proveedor = new Proveedor();
-        
-        String nombre = nameInput.getValue();
-        String email = emailInput.getValue();
-        String telefono = telefonoInput.getValue();
-        String direccion = direccionInput.getValue();
-        
-        if (nombre.isEmpty() || email.isEmpty() || telefono.isEmpty())
-            throw new Exception("Complete todos los campos");
-        
-        Validator.EMAIL(email);
-        Validator.TELEFONO(telefono);
-        
-        proveedor.setId(Integer.parseInt(idProveedor));
-        proveedor.setNombre(nombre);
-        proveedor.setEmail(email);
-        proveedor.setTelefono(telefono);
-        proveedor.setDireccion(direccion);
-        
-        if (ProveedorControlador.actualizarProveedor(proveedor)) {
-            // Si la categoría se crea con éxito, muestra un mensaje de éxito
-            JOptionPane.showMessageDialog(null, "Registro guardado");
-            ProveedorPage.recagarTabla();
-            dispose();
-        } else {
-            // Si hay un error al crear la categoría, muestra un mensaje de error
-            JOptionPane.showMessageDialog(null, "Error al guardar");
-        }
+            Proveedor proveedor = new Proveedor();
+
+            String nombre = nameInput.getValue();
+            String email = emailInput.getValue();
+            String telefono = telefonoInput.getValue();
+            String direccion = direccionInput.getValue();
+
+            if (nombre.isEmpty() || email.isEmpty() || telefono.isEmpty())
+                throw new Exception("Complete todos los campos");
+
+            Validator.EMAIL(email);
+            Validator.TELEFONO(telefono);
+
+            proveedor.setId(Integer.parseInt(idProveedor));
+            proveedor.setNombre(nombre);
+            proveedor.setEmail(email);
+            proveedor.setTelefono(telefono);
+            proveedor.setDireccion(direccion);
+
+            if (ProveedorControlador.actualizarProveedor(proveedor)) {
+                // Si la categoría se crea con éxito, muestra un mensaje de éxito
+                JOptionPane.showMessageDialog(null, "Registro guardado");
+                ProveedorPage.recagarTabla();
+                dispose();
+            } else {
+                // Si hay un error al crear la categoría, muestra un mensaje de error
+                JOptionPane.showMessageDialog(null, "Error al guardar");
+            }
         } catch (Exception error){
             JOptionPane.showMessageDialog(null, error.getMessage());
         }

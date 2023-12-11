@@ -115,12 +115,16 @@ public class ManageButtonEditorRenderer extends AbstractCellEditor implements Ta
         
         switch (model) {
             case "Categoria" -> {
-                ManageCategoriaModal dialog = new ManageCategoriaModal(parent, true, id);
+                ManageCategoriaModal dialog = null;
+                if((Boolean) props.get("view")) dialog = new ManageCategoriaModal(parent, true, id, true);
+                else dialog = new ManageCategoriaModal(parent, true, id);
                 dialog.setLocationRelativeTo(null);
                 dialog.setVisible(true);
             }
             case "Producto" -> {
-                ManageProductoModal dialog = new ManageProductoModal(parent, true, id);
+                ManageProductoModal dialog = null;
+                if((Boolean) props.get("view")) dialog = new ManageProductoModal(parent, true, id, true);
+                else dialog = new ManageProductoModal(parent, true, id);
                 dialog.setLocationRelativeTo(null);
                 dialog.setVisible(true);
             }
@@ -136,12 +140,16 @@ public class ManageButtonEditorRenderer extends AbstractCellEditor implements Ta
                 }
             }
             case "Cliente" -> {
-                ManageClienteModal dialog = new ManageClienteModal(parent, true, id);
+                ManageClienteModal dialog = null;
+                if((Boolean) props.get("view")) dialog = new ManageClienteModal(parent, true, id, true);
+                else dialog = new ManageClienteModal(parent, true, id);
                 dialog.setLocationRelativeTo(null);
                 dialog.setVisible(true);
             }
             case "Proveedor" -> {
-                ManageProveedorModal dialog = new ManageProveedorModal(parent, true, id);
+                ManageProveedorModal dialog = null;
+                if((Boolean) props.get("view")) dialog = new ManageProveedorModal(parent, true, id, true);
+                else dialog = new ManageProveedorModal(parent, true, id);
                 dialog.setLocationRelativeTo(null);
                 dialog.setVisible(true);
             }

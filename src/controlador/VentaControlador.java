@@ -271,7 +271,7 @@ public class VentaControlador {
             encabezado.setWidthPercentage(100);
             encabezado.getDefaultCell().setBorder(0);
             
-            int columnaWidths[] = new int[]{70, 10, 60, 40};
+            int columnaWidths[] = new int[]{60, 5, 60, 40};
             encabezado.setWidths(columnaWidths);
             encabezado.setHorizontalAlignment(Element.ALIGN_LEFT);
             
@@ -380,10 +380,10 @@ public class VentaControlador {
             for(VentaProducto ventaProducto : venta.ventasProducto){
                 String nombreProducto = ventaProducto.getProducto().getNombre();
                 String cantidad = String.valueOf(ventaProducto.getCantidad());
-                String precioUnitario = String.valueOf(ventaProducto.getPrecioUnitario());
-                String subTotal = String.valueOf(ventaProducto.getSubTotal());
+                String precioUnitario = "S/."+ventaProducto.getPrecioUnitario();
+                String subTotal = "S/." + ventaProducto.getSubTotal();
                 totalVenta += ventaProducto.getTotal();
-                String total = String.valueOf(ventaProducto.getTotal());
+                String total = "S/." + ventaProducto.getTotal();
                 
                 tablaProducto.addCell(nombreProducto);
                 tablaProducto.addCell(cantidad);
@@ -393,13 +393,16 @@ public class VentaControlador {
             }
             
             totalVenta = (double) Math.round(totalVenta * 100) / 100;
+            double igv = (double) totalVenta - venta.getGanancia();
             
             doc.add(tablaProducto);
             
             //Total a pagar
             Paragraph info = new Paragraph();
             info.add(Chunk.NEWLINE);
-            info.add("Total a pagar: " + totalVenta);
+            info.add("Subtotal: S/." + venta.getGanancia() + "\n");
+            info.add("IGV: S/." + igv + "\n");
+            info.add("Total: S/." + totalVenta + "\n");
             info.setAlignment(Element.ALIGN_RIGHT);
             doc.add(info);
             

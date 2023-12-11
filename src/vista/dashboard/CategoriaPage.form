@@ -30,8 +30,8 @@
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="jInput1" pref="131" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" pref="417" max="-2" attributes="0"/>
+                      <Component id="jInput1" min="-2" pref="182" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="366" max="-2" attributes="0"/>
                       <Component id="OpenModalButton" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -88,6 +88,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Buscar categor&#xed;a"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jInput1ActionPerformed"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new components.jInput(&quot;Buscar categor&#xed;a&quot;)"/>
       </AuxValues>

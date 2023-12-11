@@ -61,6 +61,36 @@ public class ManageProductoModal extends javax.swing.JDialog {
         jButton1.setText("Guardar");
         ProductoPage.recagarTabla();
     }
+    
+    public ManageProductoModal(java.awt.Frame parent, boolean modal, String id, boolean view) {
+        super(parent, modal);
+        this.parent = parent;
+        Producto producto = ProductoControlador.obtenerProducto(id);
+        
+        this.idProducto = id;
+        this.idCategoria = producto.getCategoria().getId();
+        this.idMarca = producto.getMarca().getId();
+        
+        initComponents();
+        cargarCategoriasEnCombobox();
+        cargarMarcasEnCombobox();
+        
+        jLabel1.setText("Ver Producto");
+        nameInput.setValue(producto.getNombre());
+        descripcionInput.setValue(producto.getDescripcion());
+        stockInput.setValue(String.valueOf(producto.getStock()));
+        precioInput.setValue(String.valueOf(producto.getPrecio()));
+        
+        jButton1.setVisible(false);
+        nameInput.setEnabled(false);
+        descripcionInput.setEnabled(false);
+        stockInput.setEnabled(false);
+        precioInput.setEnabled(false);
+        CategoriaComboBox.setEnabled(false);
+        GestionarMarca.setEnabled(false);
+        MarcaComboBox.setEnabled(false);
+        ProductoPage.recagarTabla();
+    }
 
     private void cargarCategoriasEnCombobox() {
         CategoriaComboBoxModel.addElement("Seleccionar Categoría");

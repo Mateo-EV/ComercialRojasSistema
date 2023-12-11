@@ -44,6 +44,26 @@ public class ManageCategoriaModal extends javax.swing.JDialog {
         CategoriaPage.recagarTabla();
         
     }
+    
+    public ManageCategoriaModal(java.awt.Frame parent, boolean modal, String id, boolean view) {
+        super(parent, modal);
+        Categoria categoria = CategoriaControlador.obtenerCategoria(id);
+        
+        initComponents();
+        
+        jLabel1.setText("Ver Categoría");
+        nameInput.setValue(categoria.getNombre());
+        descripcionInput.setValue(categoria.getDescripcion());
+        
+        jButton1.setVisible(false);
+        
+        nameInput.setEnabled(false);
+        descripcionInput.setEnabled(false);
+        
+        this.idCategoria = id;
+        CategoriaPage.recagarTabla();
+        
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

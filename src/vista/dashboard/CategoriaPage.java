@@ -77,6 +77,11 @@ public class CategoriaPage extends javax.swing.JPanel {
         jScrollPane1.setViewportView(jTable1);
 
         jInput1.setText("Buscar categoría");
+        jInput1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jInput1ActionPerformed(evt);
+            }
+        });
 
         OpenModalButton.setText("Agregar Categoría");
         OpenModalButton.addActionListener(new java.awt.event.ActionListener() {
@@ -97,8 +102,8 @@ public class CategoriaPage extends javax.swing.JPanel {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jInput1, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
-                        .addGap(417, 417, 417)
+                        .addComponent(jInput1, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(366, 366, 366)
                         .addComponent(OpenModalButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(31, 31, 31))
         );
@@ -124,12 +129,16 @@ public class CategoriaPage extends javax.swing.JPanel {
         dialog.setVisible(true);
     }//GEN-LAST:event_OpenModalButtonActionPerformed
 
+    private void jInput1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jInput1ActionPerformed
+        
+    }//GEN-LAST:event_jInput1ActionPerformed
 
+    static private List<Categoria> categorias;
     static public DefaultTableModel cargarTablaCategorias(){
         DefaultTableModel tableModel = new DefaultTableModel(); // Crea un modelo de tabla
         
         // Obtiene la lista de categorías desde el controlador de categorías
-        List<Categoria> categorias = CategoriaControlador.obtenerCategorias();
+        categorias = CategoriaControlador.obtenerCategorias();
   
         // Agrega las columnas al modelo de tabla
         tableModel.addColumn("Id");

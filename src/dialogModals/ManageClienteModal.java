@@ -51,6 +51,36 @@ public class ManageClienteModal extends javax.swing.JDialog {
         ClientePage.recagarTabla();
     }
 
+    public ManageClienteModal(java.awt.Frame parent, boolean modal, String id, boolean view) {
+        super(parent, modal);
+        Cliente cliente = ClienteControlador.obtenerCliente(id);
+
+        initComponents();
+
+        jLabel1.setText("Ver Cliente");
+        nameInput.setValue(cliente.getNombre());
+        apellidoInput.setValue(cliente.getApellido());
+        dniRucInput.setValue(cliente.getDni_ruc());
+        emailInput.setValue(cliente.getEmail());
+        telefonoInput.setValue(cliente.getTelefono());
+        direccionInput.setValue(cliente.getDireccion());
+
+        TipoClienteComboBox.setSelectedItem(cliente.getTipoCliente());
+
+        jButton1.setVisible(false);
+        nameInput.setEnabled(false);
+        apellidoInput.setEnabled(false);
+        dniRucInput.setEnabled(false);
+        emailInput.setEnabled(false);
+        telefonoInput.setEnabled(false);
+        direccionInput.setEnabled(false);
+
+        TipoClienteComboBox.setEnabled(false);
+
+        this.idCliente = id;
+        ClientePage.recagarTabla();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
